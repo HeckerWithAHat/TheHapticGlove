@@ -1,7 +1,7 @@
 from LCDAPI.I2C_LCD import I2CLcd
 from machine import I2C, Pin
 screen = I2CLcd(I2C(0, sda=Pin(20), scl=Pin(21), freq=400000), I2C(0, sda=Pin(20), scl=Pin(21), freq=400000).scan()[0], 2, 16)
-current_buttons = {
+user_assigned_buttons = {
     "IT": "",
     "IM": "",
     "IB": "",
@@ -14,6 +14,24 @@ current_buttons = {
     "PT": "",
     "PB": ""
 }
+config_buttons = {
+    "IT": "",
+    "IM": "",
+    "IB": "",
+    "MT": "",
+    "MM": "",
+    "MB": "",
+    "RT": "",
+    "RM": "",
+    "RB": "",
+    "PT": "",
+    "PB": ""
+}
+current_buttons = {
+    
+}
+
+
 long_buttons = {
     "0": "",
     "1": "",
