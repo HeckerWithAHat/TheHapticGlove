@@ -1,7 +1,6 @@
 import subprocess
 import os
 import time
-import EPDAPI
 import epd2in13b_V4
 import globalvars
 from gpiozero import *
@@ -17,11 +16,12 @@ class OS:
         # If yes do all the wifi stuff, and set the wifi variable in global vars to true
         # If no, just boot up the OS, and set the wifi variable in global vars to false
         for m in globalvars.mapping: 
-            globalvars.buttons[m] = Button(globalvars.mapping[m])
+            globalvars.buttons[m] = Button(pin="BOARD"+str(globalvars.mapping[m]))
         globalvars.epd = epd2in13b_V4.EPD()
         globalvars.epd.init()
         globalvars.epd.Clear()
         time.sleep(1)
+        import EPDAPI
         EPDAPI.createImageFromOptions("Do you want to use WiFi?", option1="Yes", option2="No")
         usingWifi = None
         while usingWifi == None:
