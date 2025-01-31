@@ -1,28 +1,14 @@
-from LCDAPI.I2C_LCD import I2CLcd
-from machine import I2C, Pin
-screen = I2CLcd(I2C(0, sda=Pin(20), scl=Pin(21), freq=400000), I2C(0, sda=Pin(20), scl=Pin(21), freq=400000).scan()[0], 2, 16)
-user_assigned_buttons = {
-    "IT": "",
-    "IM": "",
-    "IB": "",
-    "MT": "",
-    "MM": "",
-    "MB": "",
-    "RT": "",
-    "RM": "",
-    "RB": "",
-    "PT": "",
-    "PB": ""
-}
+wifiModeActive = False
+getOpenApp = ""
 config_buttons = {
     "IT": "",
-    "IM": "",
+    "IM": "", # LEFT
     "IB": "",
-    "MT": "",
-    "MM": "",
-    "MB": "",
+    "MT": "", # UP
+    "MM": "", # SELECT
+    "MB": "", # DOWN
     "RT": "",
-    "RM": "",
+    "RM": "", # RIGHT
     "RB": "",
     "PT": "",
     "PB": ""
@@ -47,3 +33,12 @@ long_buttons = {
     "11": ""
 }
 installed_apps = {}
+epd = None
+chars = list('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_+=~`[]{}|\\:;"\'<>,.?/ ')
+buttons = []
+def fingerCodeToNumber(self, s):
+        return mapping.get(s.upper(), None)
+mapping = {
+    'PB': 15, 'PT': 14, 'RB': 9, 'RM': 11, 'RT': 10,
+    'MB': 8, 'MM': 7, 'MT': 6, 'IB': 4, 'IM': 3, 'IT': 2
+}

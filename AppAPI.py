@@ -9,10 +9,13 @@ class App:
     def __init__(self, appId, name):
         installed_apps[str(appId)] = self
         self.appName = name
-    def setAppDefinedCommands(self, **commands):
-        self.appDefinedCommands = commands
+        self.appDefinedCommands = {}
         
-    def setAppDefinedSettings(self, **settings):
+    def setAppCommands(self, func, button = "", usesWifi = False):
+        self.appDefinedCommands[button] = func
+        
+        
+    def setAppSettings(self, **settings):
         self.appDefinedSettings = settings
     
     def setAppName(self, name):
@@ -23,10 +26,5 @@ class App:
         buttonNumber = self.string_to_number(LocationToPut)
         current_buttons[str(buttonNumber)] = self.appDefinedCommands[commandId]["method"]
     
-    def string_to_number(self, s):
-        mapping = {
-            'PB': 15, 'PT': 14, 'RB': 9, 'RM': 11, 'RT': 10,
-            'MB': 8, 'MM': 7, 'MT': 6, 'IB': 4, 'IM': 3, 'IT': 2
-        }
-        return mapping.get(s.upper(), None)
+    
     

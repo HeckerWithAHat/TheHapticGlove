@@ -5,7 +5,7 @@ import os
 
 from collections import deque
 import itertools
-
+import globalvars
 import logging
 import epd2in13b_V4
 import time
@@ -13,7 +13,27 @@ from PIL import Image,ImageDraw,ImageFont
 
 logging.basicConfig(level=logging.DEBUG)
 
-def createImageFromOptions(question, imagename, **options):
+def createKeyboardFromPrompt(question, currentCharacter):
+    font14 = ImageFont.truetype('fonts/Font.ttc', 11)
+    imageToDisplay = Image.new('1', (250, 122), 255)  # 250*122
+    draw = ImageDraw.Draw(imageToDisplay)
+    draw.text((125, 15), question, font = font14, fill = 0, anchor = 'mm', align = 'center')
+    draw.line((0, 30, 250, 30), fill = 0)
+    chars = [list('ABCDEFGHIJKLMNOPQRS'),list('TUVWXYZabcdefghijkl'),list('mnopqrstuvwxyz01234'),list('56789!@#$%^&*()-_+='),list('~`[]{}|\\:;"\'<>,.?/ ')]
+    for i in chars:
+        for j in i:
+            coords = (2+13*i.index(j), 56+13*(chars.index(i)), 14+13*i.index(j), 68+13*(chars.index(i)))
+            if j == currentCharacter:
+                draw.rectangle(coords, outline = 0, fill = 0)
+                draw.text((coords[0]+7, coords[1]+7), j, font = font14, fill = 255, anchor = 'mm', align = 'center')
+            else:
+                draw.text((coords[0]+7, coords[1]+7), j, font = font14, fill = 0, anchor = 'mm', align = 'center')
+                draw.rectangle(coords, outline = 0)
+    imageToDisplay.save("kb.jpg", "JPEG")
+    globalvars.epd.display(globalvars.epd.getbuffer(imageToDisplay))
+
+
+def createImageFromOptions(question, **options):
     font20 = ImageFont.truetype('fonts/Font.ttc', 20)
     font18 = ImageFont.truetype('fonts/Font.ttc', 18)
     imageToDisplay = Image.new('1', (250, 122), 255)  # 250*122
@@ -52,59 +72,17 @@ def createImageFromOptions(question, imagename, **options):
         for i in range(len(options)):
             drawblack.rectangle((-26 + (62*i), 50, 26 + (62*i), 102), outline = 0)
             drawblack.text(((62*i), 76), options[next(optionsKeys)], font = font18, fill = 0, anchor = 'mm', align = 'center')
-    imageToDisplay.save(imagename+".jpg", "JPEG")
+    globalvars.epd.display(globalvars.epd.getbuffer(imageToDisplay))
     return imageToDisplay
 
 try:
-    logging.info("epd2in13b_V4 Demo")
     
-    # epd = epd2in13b_V4.EPD()
-    # logging.info("init and Clear")
-    # epd.init()
-    # epd.Clear()
-    # time.sleep(1)
-    
-    # Drawing on the image
-    logging.info("Drawing")    
-    font20 = ImageFont.truetype('fonts/Font.ttc', 20)
-    font18 = ImageFont.truetype('fonts/Font.ttc', 18)
-    
-    # Drawing on the Horizontal image
-    logging.info("1.Drawing on the Horizontal image...") 
-    # HBlackimage = Image.new('1', (250, 122), 255)  # 250*122
-    # HRYimage = Image.new('1', (250, 122), 255)  # 250*122
-    # drawblack = ImageDraw.Draw(HBlackimage)
-    # drawry = ImageDraw.Draw(HRYimage)
-    # drawblack.text((125, 15), 'Launch in wifi mode?', font = font20, fill = 0, anchor = 'mm', align = 'center')
-    # drawblack.line((0, 30, 250, 30), fill = 0)
-    # # drawblack.text((120, 0), u'微雪电子', font = font20, fill = 0)    
-    # drawblack.line((20, 50, 70, 100), fill = 0)
-    # drawblack.line((70, 50, 20, 100), fill = 0)
-    # drawblack.rectangle((20, 50, 70, 100), outline = 0)    
-    # drawry.line((165, 50, 165, 100), fill = 0)
-    # drawry.line((140, 75, 190, 75), fill = 0)
-    # drawry.arc((140, 50, 190, 100), 0, 360, fill = 0)
-    # drawry.rectangle((80, 50, 130, 100), fill = 0)
-    # drawry.chord((85, 55, 125, 95), 0, 360, fill =1)
-    # HBlackimage.save("drawblack.jpg", "JPEG")
-    # HRYimage.save("drawry.jpg", "JPEG")
-    # epd.display(epd.getbuffer(HBlackimage), epd.getbuffer(HRYimage))
-    createImageFromOptions("Launch in wifi mode?", "oneoption", option1="Yes")
-    createImageFromOptions("Launch in wifi mode?", "twooptions", option1="Yes", option2="No")
-    createImageFromOptions("Launch in wifi mode?", "threeoptions", option1="Yes", option2="No", option3="Maybe")
-    createImageFromOptions("Launch in wifi mode?", "fouroptions", option1="Yes", option2="No", option3="Maybe", option4="Idk")
-    createImageFromOptions("Launch in wifi mode?", "fiveoptions", option1="Yes", option2="No", option3="Maybe", option4="Idk", option5="Maybe\nnot")
-    createImageFromOptions("Launch in wifi mode?", "sixoptions", option1="Yes", option2="No", option3="Maybe", option4="Idk", option5="Maybe\nnot", option6="Maybe\nyes")
+    createKeyboardFromPrompt("Launch in wifi mode?", "Y")
+    # down
+    createKeyboardFromPrompt("Launch in wifi mode?", globalvars.chars[globalvars.chars.index("Y")+19])
 
 
     time.sleep(2)
-    
-    # logging.info("Clear...")
-    # epd.init()
-    # epd.clear()
-    
-    # logging.info("Goto Sleep...")
-    # epd.sleep()
         
 except IOError as e:
     logging.info(e)

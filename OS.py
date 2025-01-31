@@ -1,22 +1,53 @@
 import subprocess
 import os
 import time
-
+import EPDAPI
+import epd2in13b_V4
+import globalvars
+from gpiozero import *
 
 # TODO:
 # ADD A UPDATE BUTTONS METHOD
 
 
 class OS:
-    def __init__(self, wifi_SSID, wifi_PASS):
+    def __init__(self):
         # Boot up the OS
         # Ask for if the user wants to start in wifi mode
         # If yes do all the wifi stuff, and set the wifi variable in global vars to true
         # If no, just boot up the OS, and set the wifi variable in global vars to false
-        didWifiConnect = self.connectToWiFi()
-        while didWifiConnect == False:
-            self.changeWifi(wifi_SSID, wifi_PASS)
-            didWifiConnect = self.connectToWiFi()
+        for m in globalvars.mapping: 
+            globalvars.buttons[m] = Button(globalvars.mapping[m])
+        globalvars.epd = epd2in13b_V4.EPD()
+        globalvars.epd.init()
+        globalvars.epd.Clear()
+        time.sleep(1)
+        EPDAPI.createImageFromOptions("Do you want to use WiFi?", option1="Yes", option2="No")
+        usingWifi = None
+        while usingWifi == None:
+            if globalvars.buttons["IT"].is_pressed: # YES
+                usingWifi = True
+                didWifiConnect = self.connectToWiFi()
+                while didWifiConnect == False:
+                    wifi_SSID = ""
+                    lines = subprocess.check_output(["iwlist", "wlan0", "scan"]).decode("utf-8").split('\n')
+                    ssids = set()
+                    for line in lines:
+                        if "ESSID:" in line:
+                            ssid = line.split("ESSID:")[-1].strip()
+                            ssids.add(ssid)
+                    ssids = sorted(list(ssids))
+                    EPDAPI.createImageFromOptions("What is the name of the WiFi?", options=enumerate(ssids))
+                    # while wifi_SSID == "":
+                    #     # start input searching, on input rotate ssids and then reshow the image
+                    #     # when hit select, set wifiSSID to be the first element in the list
+                    #     pass
+                    # self.changeWifi(wifi_SSID, wifi_PASS)
+                    # didWifiConnect = self.connectToWiFi()
+            if globalvars.buttons["RT"].is_pressed: # NO
+                usingWifi = False
+        globalvars.wifiModeActive = usingWifi
+                
         
         
     def changeWifi(self, name, password):
@@ -77,15 +108,8 @@ class OS:
             return False
         
     def registerApps(self):
-        screen.move_to(0, 1)
-        screen.putstr("Registering Apps")
-        sleep(1)
+        
         count = 0
-        screen.clear()
-        screen.move_to(0,0)
-        screen.putstr("Glove OS Booting")
-        screen.move_to(0, 1)
-        screen.putstr(str(count) + " Registered")
         for file_name in os.listdir("apps"):
             if file_name.endswith(".py"):
                 class_name = file_name[:-3]  # Remove the .py extension
@@ -93,5 +117,4 @@ class OS:
                 
                 instance = classToRegister()
                 count = count + 1
-                screen.move_to(0, 1)
-                screen.putstr(str(count) + " Registered")
+                
