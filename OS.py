@@ -47,12 +47,33 @@ class OS:
                     if globalvars.buttons["RM"].is_pressed: # right
                         ssids.insert(0,ssids.pop())
                 wifi_PASS = ""
-                currentChar = "A"
+                currentPlace = (0,0)
                 charList = [list('ABCDEFGHIJKLMNOPQRS'),list('TUVWXYZabcdefghijkl'),list('mnopqrstuvwxyz01234'),list('56789!@#$%^&*()-_+='),list('~`[]{}|\\:;"\'<>,.?/ ')]
-                EPDAPI.createKeyboardFromPrompt("What is the password?", currentChar)
+                EPDAPI.createKeyboardFromPrompt("What is the password?", charList[currentPlace[0]][currentPlace[1]])
                 # read input and update the currentChar, then when select is pressed, add current char to wifi_PASS
+                currenttext = ""
                 while wifi_PASS == "":
-                    pass
+                    if globalvars.buttons["IM"].is_pressed: # left
+                        currentPlace = (currentPlace[0], (currentPlace[1] - 1) % 26)
+                        EPDAPI.createKeyboardFromPrompt("What is the password: " + currenttext, charList[currentPlace[0]][currentPlace[1]])
+                    if globalvars.buttons["MM"].is_pressed: # select
+                        currenttext +=charList[currentPlace[0]][currentPlace[1]]
+                    if globalvars.buttons["RM"].is_pressed: # right
+                        currentPlace = (currentPlace[0], (currentPlace[1] + 1) % 26)
+                        EPDAPI.createKeyboardFromPrompt("What is the password: " + currenttext, charList[currentPlace[0]][currentPlace[1]])
+                    if globalvars.buttons["MT"].is_pressed: # up
+                        currentPlace = ((currentPlace[0] - 1) % 5, currentPlace[1])
+                        EPDAPI.createKeyboardFromPrompt("What is the password: " + currenttext, charList[currentPlace[0]][currentPlace[1]])
+                    if globalvars.buttons["MB"].is_pressed: # down
+                        currentPlace = ((currentPlace[0] + 1) % 5, currentPlace[1])
+                        EPDAPI.createKeyboardFromPrompt("What is the password: " + currenttext, charList[currentPlace[0]][currentPlace[1]])
+                    if globalvars.buttons["IT"].is_pressed: # YES
+                        wifi_PASS = currenttext
+                        break
+                    if globalvars.buttons["RT"].is_pressed: # back
+                        currenttext = currenttext[:-1] 
+                        EPDAPI.createKeyboardFromPrompt("What is the password: " + currenttext, charList[currentPlace[0]][currentPlace[1]])
+
                 self.changeWifi(wifi_SSID, wifi_PASS)
                 didWifiConnect = self.connectToWiFi()
     
