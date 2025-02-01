@@ -13,7 +13,7 @@ from PIL import Image,ImageDraw,ImageFont
 
 logging.basicConfig(level=logging.DEBUG)
 
-def createKeyboardFromPrompt(question, currentCharacter):
+def createKeyboardFromPrompt(question, currentCharacter = "A"):
     font14 = ImageFont.truetype('fonts/Font.ttc', 11)
     imageToDisplay = Image.new('1', (250, 122), 255)  # 250*122
     draw = ImageDraw.Draw(imageToDisplay)

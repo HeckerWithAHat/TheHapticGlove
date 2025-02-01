@@ -5,15 +5,8 @@ import EPDAPI
 import epd2in13b_V4
 import globalvars
 from gpiozero import *
-
-# TODO:
-# ADD A UPDATE BUTTONS METHOD
-
-
 class OS:
     def __init__(self):
-        # Boot up the OS
-        # Ask for if the user wants to start in wifi mode
         # If yes do all the wifi stuff, and set the wifi variable in global vars to true
         # If no, just boot up the OS, and set the wifi variable in global vars to false
         for m in globalvars.mapping: 
@@ -22,33 +15,46 @@ class OS:
         globalvars.epd.init()
         globalvars.epd.Clear()
         time.sleep(1)
+        import EPDAPI
+        
         EPDAPI.createImageFromOptions("Do you want to use WiFi?", option1="Yes", option2="No")
         usingWifi = None
         while usingWifi == None:
             if globalvars.buttons["IT"].is_pressed: # YES
                 usingWifi = True
-                didWifiConnect = self.connectToWiFi()
-                while didWifiConnect == False:
-                    wifi_SSID = ""
-                    lines = subprocess.check_output(["iwlist", "wlan0", "scan"]).decode("utf-8").split('\n')
-                    ssids = set()
-                    for line in lines:
-                        if "ESSID:" in line:
-                            ssid = line.split("ESSID:")[-1].strip()
-                            ssids.add(ssid)
-                    ssids = sorted(list(ssids))
-                    EPDAPI.createImageFromOptions("What is the name of the WiFi?", options=enumerate(ssids))
-                    # while wifi_SSID == "":
-                    #     # start input searching, on input rotate ssids and then reshow the image
-                    #     # when hit select, set wifiSSID to be the first element in the list
-                    #     pass
-                    # self.changeWifi(wifi_SSID, wifi_PASS)
-                    # didWifiConnect = self.connectToWiFi()
             if globalvars.buttons["RT"].is_pressed: # NO
                 usingWifi = False
+                break
         globalvars.wifiModeActive = usingWifi
-                
-        
+        if globalvars.wifiModeActive:
+            didWifiConnect = self.connectToWiFi()
+            while didWifiConnect == False:
+                wifi_SSID = ""
+                lines = subprocess.check_output(["iwlist", "wlan0", "scan"]).decode("utf-8").split('\n')
+                ssids = set()
+                for line in lines:
+                    if "ESSID:" in line:
+                        ssid = line.split("ESSID:")[-1].strip()
+                        ssids.add(ssid)
+                ssids = sorted(list(ssids))
+                EPDAPI.createImageFromOptions("What is the name of the WiFi?", options=enumerate(ssids))
+                while wifi_SSID == "":
+                    if globalvars.buttons["IM"].is_pressed: # left
+                        ssids.append(ssids.pop(0))
+                            
+                    if globalvars.buttons["MM"].is_pressed: # select
+                        wifi_SSID = ssids[0]
+                        break
+                    if globalvars.buttons["RM"].is_pressed: # right
+                        ssids.insert(0,ssids.pop())
+                wifi_PASS = ""
+                currentChar = "A"
+                EPDAPI.createKeyboardFromPrompt("What is the password?", currentChar)
+                # read input and update the currentChar, then when select is pressed, add current char to wifi_PASS
+
+                self.changeWifi(wifi_SSID, wifi_PASS)
+                didWifiConnect = self.connectToWiFi()
+    
         
     def changeWifi(self, name, password):
         # Read the current wpa_supplicant.conf file

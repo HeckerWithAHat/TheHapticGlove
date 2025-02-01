@@ -35,10 +35,10 @@ long_buttons = {
 installed_apps = {}
 epd = None
 chars = list('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_+=~`[]{}|\\:;"\'<>,.?/ ')
-buttons = []
+buttons = {}
 def fingerCodeToNumber(self, s):
         return mapping.get(s.upper(), None)
 mapping = {
-    'PB': 15, 'PT': 14, 'RB': 9, 'RM': 11, 'RT': 10,
-    'MB': 8, 'MM': 7, 'MT': 6, 'IB': 4, 'IM': 3, 'IT': 2
+    'PB': 21, 'PT': 20, 'RB': 26, 'RM': 19, 'RT': 13,
+    'MB': 23, 'MM': 15, 'MT': 14, 'IB': 4, 'IM': 3, 'IT': 2
 }
