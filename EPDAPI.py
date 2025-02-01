@@ -30,10 +30,10 @@ def createKeyboardFromPrompt(question, currentCharacter = "A"):
                 draw.text((coords[0]+7, coords[1]+7), j, font = font14, fill = 0, anchor = 'mm', align = 'center')
                 draw.rectangle(coords, outline = 0)
     imageToDisplay.save("kb.jpg", "JPEG")
-    globalvars.epd.display(globalvars.epd.getbuffer(imageToDisplay))
+    globalvars.epd.display(globalvars.epd.getbuffer(imageToDisplay), globalvars.epd.getbuffer(imageToDisplay))
 
 
-def createImageFromOptions(question, **options):
+def createImageFromOptions(question, options):
     font20 = ImageFont.truetype('fonts/Font.ttc', 20)
     font18 = ImageFont.truetype('fonts/Font.ttc', 18)
     imageToDisplay = Image.new('1', (250, 122), 255)  # 250*122
@@ -43,50 +43,40 @@ def createImageFromOptions(question, **options):
     optionsKeys = iter(options)
     if len(options) == 1:
         drawblack.rectangle((50, 50, 200, 100), outline = 0)
-        drawblack.text((125, 75), options[next(optionsKeys)], font = font18, fill = 0, anchor = 'mm', align = 'center')
+        drawblack.text((125, 75), next(optionsKeys), font = font18, fill = 0, anchor = 'mm', align = 'center')
     elif len(options) == 2:
         drawblack.rectangle((20, 50, 115, 102), outline = 0)
-        drawblack.text((68, 76), options[next(optionsKeys)], font = font18, fill = 0, anchor = 'mm', align = 'center')
+        drawblack.text((68, 76), next(optionsKeys), font = font18, fill = 0, anchor = 'mm', align = 'center')
         drawblack.rectangle((135, 50, 230, 102), outline = 0)
-        drawblack.text((182, 76), options[next(optionsKeys)], font = font18, fill = 0, anchor = 'mm', align = 'center')
+        drawblack.text((182, 76), next(optionsKeys), font = font18, fill = 0, anchor = 'mm', align = 'center')
     elif len(options) == 3:
         drawblack.rectangle((21, 50, 77, 102), outline = 0)
-        drawblack.text((49, 76), options[next(optionsKeys)], font = font18, fill = 0, anchor = 'mm', align = 'center')
+        drawblack.text((49, 76), next(optionsKeys), font = font18, fill = 0, anchor = 'mm', align = 'center')
         drawblack.rectangle((97, 50, 153, 102), outline = 0)
-        drawblack.text((125, 76), options[next(optionsKeys)], font = font18, fill = 0, anchor = 'mm', align = 'center')
+        drawblack.text((125, 76), next(optionsKeys), font = font18, fill = 0, anchor = 'mm', align = 'center')
         drawblack.rectangle((173, 50, 229, 102), outline = 0)
-        drawblack.text((201, 76), options[next(optionsKeys)], font = font18, fill = 0, anchor = 'mm', align = 'center')
+        drawblack.text((201, 76), next(optionsKeys), font = font18, fill = 0, anchor = 'mm', align = 'center')
     elif len(options) == 4:
         drawblack.rectangle((6, 50, 61, 102), outline = 0)
-        drawblack.text((33, 76), options[next(optionsKeys)], font = font18, fill = 0, anchor = 'mm', align = 'center')
+        drawblack.text((33, 76), next(optionsKeys), font = font18, fill = 0, anchor = 'mm', align = 'center')
         drawblack.rectangle((67, 50, 122, 102), outline = 0)
-        drawblack.text((94, 76), options[next(optionsKeys)], font = font18, fill = 0, anchor = 'mm', align = 'center')
+        drawblack.text((94, 76), next(optionsKeys), font = font18, fill = 0, anchor = 'mm', align = 'center')
         drawblack.rectangle((128, 50, 183, 102), outline = 0)
-        drawblack.text((155, 76), options[next(optionsKeys)], font = font18, fill = 0, anchor = 'mm', align = 'center')
+        drawblack.text((155, 76), next(optionsKeys), font = font18, fill = 0, anchor = 'mm', align = 'center')
         drawblack.rectangle((189, 50, 244, 102), outline = 0)
-        drawblack.text((216, 76), options[next(optionsKeys)], font = font18, fill = 0, anchor = 'mm', align = 'center')
+        drawblack.text((216, 76), next(optionsKeys), font = font18, fill = 0, anchor = 'mm', align = 'center')
     else:
         
         optionsKeys = itertools.cycle(optionsKeys)
         for i in range(len(options)-2): next(optionsKeys)
         for i in range(len(options)):
             drawblack.rectangle((-26 + (62*i), 50, 26 + (62*i), 102), outline = 0)
-            drawblack.text(((62*i), 76), options[next(optionsKeys)], font = font18, fill = 0, anchor = 'mm', align = 'center')
-    globalvars.epd.display(globalvars.epd.getbuffer(imageToDisplay))
+            drawblack.text(((62*i), 76), next(optionsKeys), font = font18, fill = 0, anchor = 'mm', align = 'center')
+    globalvars.epd.display(globalvars.epd.getbuffer(imageToDisplay), globalvars.epd.getbuffer(imageToDisplay))
     return imageToDisplay
 
 try:
-    
-    createKeyboardFromPrompt("Launch in wifi mode?", "Y")
-    # down
-    createKeyboardFromPrompt("Launch in wifi mode?", globalvars.chars[globalvars.chars.index("Y")+19])
-
-
-    time.sleep(2)
-        
-except IOError as e:
-    logging.info(e)
-    
+    pass
 except KeyboardInterrupt:    
     logging.info("ctrl + c:")
     epd2in13b_V4.epdconfig.module_exit(cleanup=True)

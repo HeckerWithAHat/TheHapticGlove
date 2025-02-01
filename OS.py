@@ -1,7 +1,6 @@
 import subprocess
 import os
 import time
-import EPDAPI
 import epd2in13b_V4
 import globalvars
 from gpiozero import *
@@ -17,7 +16,7 @@ class OS:
         time.sleep(1)
         import EPDAPI
         
-        EPDAPI.createImageFromOptions("Do you want to use WiFi?", option1="Yes", option2="No")
+        EPDAPI.createImageFromOptions("Do you want to use WiFi?", ["Yes", "No"])
         usingWifi = None
         while usingWifi == None:
             if globalvars.buttons["IT"].is_pressed: # YES
@@ -27,7 +26,7 @@ class OS:
                 break
         globalvars.wifiModeActive = usingWifi
         if globalvars.wifiModeActive:
-            didWifiConnect = self.connectToWiFi()
+            didWifiConnect = False
             while didWifiConnect == False:
                 wifi_SSID = ""
                 lines = subprocess.check_output(["iwlist", "wlan0", "scan"]).decode("utf-8").split('\n')
@@ -37,7 +36,7 @@ class OS:
                         ssid = line.split("ESSID:")[-1].strip()
                         ssids.add(ssid)
                 ssids = sorted(list(ssids))
-                EPDAPI.createImageFromOptions("What is the name of the WiFi?", options=enumerate(ssids))
+                EPDAPI.createImageFromOptions("What is the name of the WiFi?", ssids)
                 while wifi_SSID == "":
                     if globalvars.buttons["IM"].is_pressed: # left
                         ssids.append(ssids.pop(0))
@@ -103,8 +102,10 @@ class OS:
         time.sleep(10)
 
         # Get the current IP address
-        result = subprocess.run(['hostname', '-I'])
-        ip_address = result.stdout.decode().strip()
+        result = subprocess.run(['hostname', '-I'], capture_output=True)
+        print(result)
+        print(result.stdout)
+        ip_address = str(result.stdout).split()[0]
 
         if ip_address:
             print(f"Connected to Wi-Fi. Current IP: {ip_address}")
