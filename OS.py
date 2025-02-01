@@ -48,9 +48,11 @@ class OS:
                         ssids.insert(0,ssids.pop())
                 wifi_PASS = ""
                 currentChar = "A"
+                charList = [list('ABCDEFGHIJKLMNOPQRS'),list('TUVWXYZabcdefghijkl'),list('mnopqrstuvwxyz01234'),list('56789!@#$%^&*()-_+='),list('~`[]{}|\\:;"\'<>,.?/ ')]
                 EPDAPI.createKeyboardFromPrompt("What is the password?", currentChar)
                 # read input and update the currentChar, then when select is pressed, add current char to wifi_PASS
-
+                while wifi_PASS == "":
+                    pass
                 self.changeWifi(wifi_SSID, wifi_PASS)
                 didWifiConnect = self.connectToWiFi()
     
