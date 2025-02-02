@@ -55,17 +55,21 @@ class OS:
                 while wifi_PASS == "":
                     if globalvars.buttons["IM"].is_pressed: # left
                         currentPlace = (currentPlace[0], (currentPlace[1] - 1) % 26)
+                        print(currentPlace)
                         EPDAPI.createKeyboardFromPrompt("What is the password: " + currenttext, charList[currentPlace[0]][currentPlace[1]])
                     if globalvars.buttons["MM"].is_pressed: # select
                         currenttext +=charList[currentPlace[0]][currentPlace[1]]
                     if globalvars.buttons["RM"].is_pressed: # right
                         currentPlace = (currentPlace[0], (currentPlace[1] + 1) % 26)
+                        print(currentPlace)
                         EPDAPI.createKeyboardFromPrompt("What is the password: " + currenttext, charList[currentPlace[0]][currentPlace[1]])
                     if globalvars.buttons["MT"].is_pressed: # up
                         currentPlace = ((currentPlace[0] - 1) % 5, currentPlace[1])
+                        print(currentPlace)
                         EPDAPI.createKeyboardFromPrompt("What is the password: " + currenttext, charList[currentPlace[0]][currentPlace[1]])
                     if globalvars.buttons["MB"].is_pressed: # down
                         currentPlace = ((currentPlace[0] + 1) % 5, currentPlace[1])
+                        print(currentPlace)
                         EPDAPI.createKeyboardFromPrompt("What is the password: " + currenttext, charList[currentPlace[0]][currentPlace[1]])
                     if globalvars.buttons["IT"].is_pressed: # YES
                         wifi_PASS = currenttext
