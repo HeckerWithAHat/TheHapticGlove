@@ -19,7 +19,7 @@ def createKeyboardFromPrompt(question, currentCharacter = "A"):
     draw = ImageDraw.Draw(imageToDisplay)
     draw.text((125, 15), question, font = font14, fill = 0, anchor = 'mm', align = 'center')
     draw.line((0, 30, 250, 30), fill = 0)
-    chars = [list('ABCDEFGHIJKLMNOPQRS'),list('TUVWXYZabcdefghijkl'),list('mnopqrstuvwxyz01234'),list('56789!@#$%^&*()-_+='),list('~`[]{}|\\:;"\'<>,.?/ ')]
+    chars = [list('ABCDEFGHIJKLM!@#$%^'),list('NOPQRSTUVWXYZ&*()-_'),list('abcdefghijklm+=~`[]'),list('nopqrstuvwxyz{}|\\:;'),list('0123456789"\'<>,.?/ ')]
     for i in chars:
         for j in i:
             coords = (2+13*i.index(j), 56+13*(chars.index(i)), 14+13*i.index(j), 68+13*(chars.index(i)))
