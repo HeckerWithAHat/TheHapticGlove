@@ -54,13 +54,14 @@ class OS:
                 currenttext = ""
                 while wifi_PASS == "":
                     if globalvars.buttons["IM"].is_pressed: # left
-                        currentPlace = (currentPlace[0], (currentPlace[1] - 1) % 26)
+                        currentPlace = (currentPlace[0], (currentPlace[1] - 1) % 19)
                         print(currentPlace)
                         EPDAPI.createKeyboardFromPrompt("What is the password: " + currenttext, charList[currentPlace[0]][currentPlace[1]])
                     if globalvars.buttons["MM"].is_pressed: # select
                         currenttext +=charList[currentPlace[0]][currentPlace[1]]
+                        EPDAPI.createKeyboardFromPrompt("What is the password: " + currenttext, charList[currentPlace[0]][currentPlace[1]])
                     if globalvars.buttons["RM"].is_pressed: # right
-                        currentPlace = (currentPlace[0], (currentPlace[1] + 1) % 26)
+                        currentPlace = (currentPlace[0], (currentPlace[1] + 1) % 19)
                         print(currentPlace)
                         EPDAPI.createKeyboardFromPrompt("What is the password: " + currenttext, charList[currentPlace[0]][currentPlace[1]])
                     if globalvars.buttons["MT"].is_pressed: # up
@@ -125,8 +126,6 @@ class OS:
             print(f"An error occurred: {e}")
     
     def connectToWiFi(self):
-        # Wait for the network interface to be ready
-        time.sleep(10)
 
         # Get the current IP address
         result = subprocess.run(['hostname', '-I'], capture_output=True)
