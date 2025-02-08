@@ -60,7 +60,7 @@ class OS:
                             ssids.insert(0,ssids.pop())
                     wifi_PASS = ""
                     currentPlace = (0,0)
-                    charList = [list('ABCDEFGHIJKLMNOPQRS'),list('TUVWXYZabcdefghijkl'),list('mnopqrstuvwxyz01234'),list('56789!@#$%^&*()-_+='),list('~`[]{}|\\:;"\'<>,.?/ ')]
+                    charList = [list('ABCDEFGHIJKLM!@#$%^'),list('NOPQRSTUVWXYZ&*()-_'),list('abcdefghijklm+=~`[]'),list('nopqrstuvwxyz{}|\\:;'),list('0123456789"\'<>,.?/ ')]
                     EPDAPI.createKeyboardFromPrompt("What is the password?", charList[currentPlace[0]][currentPlace[1]])
                     # read input and update the currentChar, then when select is pressed, add current char to wifi_PASS
                     currenttext = ""
