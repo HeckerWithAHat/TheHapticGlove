@@ -7,30 +7,31 @@ from collections import deque
 import itertools
 import globalvars
 import logging
-import epd2in13b_V4
+import epd2in13_V4
 import time
 from PIL import Image,ImageDraw,ImageFont
 
 logging.basicConfig(level=logging.DEBUG)
 
-def createKeyboardFromPrompt(question, currentCharacter = "A"):
-    font14 = ImageFont.truetype('fonts/Font.ttc', 11)
-    imageToDisplay = Image.new('1', (250, 122), 255)  # 250*122
+def createKeyboardFromPrompt(question):
+    font11 = ImageFont.truetype('fonts/Font.ttc', 11)
+    imageToDisplay = Image.open('kb.jpg')  # 250*122
     draw = ImageDraw.Draw(imageToDisplay)
-    draw.text((125, 15), question, font = font14, fill = 0, anchor = 'mm', align = 'center')
-    draw.line((0, 30, 250, 30), fill = 0)
+    draw.text((125, 15), question, font = font11, fill = 0, anchor = 'mm', align = 'center')
+    globalvars.epd.displayPartBaseImage(globalvars.epd.getbuffer(imageToDisplay))
+    return imageToDisplay
+    
+
+def updateKeyboardFromPrompt(baseImage, coords):
     chars = [list('ABCDEFGHIJKLM!@#$%^'),list('NOPQRSTUVWXYZ&*()-_'),list('abcdefghijklm+=~`[]'),list('nopqrstuvwxyz{}|\\:;'),list('0123456789"\'<>,.?/ ')]
-    for i in chars:
-        for j in i:
-            coords = (2+13*i.index(j), 56+13*(chars.index(i)), 14+13*i.index(j), 68+13*(chars.index(i)))
-            if j == currentCharacter:
-                draw.rectangle(coords, outline = 0, fill = 0)
-                draw.text((coords[0]+7, coords[1]+7), j, font = font14, fill = 255, anchor = 'mm', align = 'center')
-            else:
-                draw.text((coords[0]+7, coords[1]+7), j, font = font14, fill = 0, anchor = 'mm', align = 'center')
-                draw.rectangle(coords, outline = 0)
-    imageToDisplay.save("kb.jpg", "JPEG")
-    globalvars.epd.display(globalvars.epd.getbuffer(imageToDisplay), globalvars.epd.getbuffer(imageToDisplay))
+    font11 = ImageFont.truetype('fonts/Font.ttc', 11)
+    char = chars[coords[0]][coords[1]]
+    coords = (2+13*coords[1], 56+13*coords[0], 14+13*coords[1], 68+13*coords[0])
+    draw = ImageDraw.Draw(baseImage)
+    draw.text((coords[0]+7, coords[1]+7), char, font = font11, fill = 255, anchor = 'mm', align = 'center')
+    draw.rectangle(coords, outline = 0,fill = 0)
+    globalvars.epd.displayPartial(globalvars.epd.getbuffer(baseImage))
+
 
 
 def createImageFromOptions(question, options):
@@ -79,6 +80,6 @@ try:
     pass
 except KeyboardInterrupt:    
     logging.info("ctrl + c:")
-    epd2in13b_V4.epdconfig.module_exit(cleanup=True)
+    epd2in13_V4.epdconfig.module_exit(cleanup=True)
     exit()
 
