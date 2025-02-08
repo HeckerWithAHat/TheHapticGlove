@@ -1,7 +1,7 @@
 import subprocess
 import os
 import time
-import epd2in13b_V4
+import epd2in13_V4
 import globalvars
 from gpiozero import *
 import nmcli
@@ -11,7 +11,7 @@ class OS:
         # If no, just boot up the OS, and set the wifi variable in global vars to false
         for m in globalvars.mapping: 
             globalvars.buttons[m] = Button(globalvars.mapping[m])
-        globalvars.epd = epd2in13b_V4.EPD()
+        globalvars.epd = epd2in13_V4.EPD()
         globalvars.epd.init()
         globalvars.epd.Clear()
         time.sleep(1)
