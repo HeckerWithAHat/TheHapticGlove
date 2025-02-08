@@ -73,7 +73,7 @@ def createImageFromOptions(question, options):
         for i in range(len(options)):
             drawblack.rectangle((-26 + (62*i), 50, 26 + (62*i), 102), outline = 0)
             drawblack.text(((62*i), 76), next(optionsKeys), font = font18, fill = 0, anchor = 'mm', align = 'center')
-    globalvars.epd.display(globalvars.epd.getbuffer(imageToDisplay), globalvars.epd.getbuffer(imageToDisplay))
+    globalvars.epd.display(globalvars.epd.getbuffer(imageToDisplay))
     return imageToDisplay
 
 try:
