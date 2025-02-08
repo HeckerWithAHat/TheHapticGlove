@@ -29,7 +29,7 @@
 
 
 import logging
-import epdconfig
+from epdconfig import RaspberryPi
 
 # Display resolution
 EPD_WIDTH       = 122
@@ -39,10 +39,11 @@ logger = logging.getLogger(__name__)
 
 class EPD:
     def __init__(self):
-        self.reset_pin = epdconfig.RST_PIN
-        self.dc_pin = epdconfig.DC_PIN
-        self.busy_pin = epdconfig.BUSY_PIN
-        self.cs_pin = epdconfig.CS_PIN
+        self.epdconfig = RaspberryPi()
+        self.reset_pin = self.epdconfig.RST_PIN
+        self.dc_pin = self.epdconfig.DC_PIN
+        self.busy_pin = self.epdconfig.BUSY_PIN
+        self.cs_pin = self.epdconfig.CS_PIN
         self.width = EPD_WIDTH
         self.height = EPD_HEIGHT
         
@@ -51,12 +52,12 @@ class EPD:
     parameter:
     '''
     def reset(self):
-        epdconfig.digital_write(self.reset_pin, 1)
-        epdconfig.delay_ms(20) 
-        epdconfig.digital_write(self.reset_pin, 0)
-        epdconfig.delay_ms(2)
-        epdconfig.digital_write(self.reset_pin, 1)
-        epdconfig.delay_ms(20)   
+        self.epdconfig.digital_write(self.reset_pin, 1)
+        self.epdconfig.delay_ms(20) 
+        self.epdconfig.digital_write(self.reset_pin, 0)
+        self.epdconfig.delay_ms(2)
+        self.epdconfig.digital_write(self.reset_pin, 1)
+        self.epdconfig.delay_ms(20)   
 
     '''
     function :send command
@@ -64,10 +65,10 @@ class EPD:
      command : Command register
     '''
     def send_command(self, command):
-        epdconfig.digital_write(self.dc_pin, 0)
-        epdconfig.digital_write(self.cs_pin, 0)
-        epdconfig.spi_writebyte([command])
-        epdconfig.digital_write(self.cs_pin, 1)
+        self.epdconfig.digital_write(self.dc_pin, 0)
+        self.epdconfig.digital_write(self.cs_pin, 0)
+        self.epdconfig.spi_writebyte([command])
+        self.epdconfig.digital_write(self.cs_pin, 1)
 
     '''
     function :send data
@@ -75,17 +76,17 @@ class EPD:
      data : Write data
     '''
     def send_data(self, data):
-        epdconfig.digital_write(self.dc_pin, 1)
-        epdconfig.digital_write(self.cs_pin, 0)
-        epdconfig.spi_writebyte([data])
-        epdconfig.digital_write(self.cs_pin, 1)
+        self.epdconfig.digital_write(self.dc_pin, 1)
+        self.epdconfig.digital_write(self.cs_pin, 0)
+        self.epdconfig.spi_writebyte([data])
+        self.epdconfig.digital_write(self.cs_pin, 1)
 
     # send a lot of data   
     def send_data2(self, data):
-        epdconfig.digital_write(self.dc_pin, 1)
-        epdconfig.digital_write(self.cs_pin, 0)
-        epdconfig.spi_writebyte2(data)
-        epdconfig.digital_write(self.cs_pin, 1)
+        self.epdconfig.digital_write(self.dc_pin, 1)
+        self.epdconfig.digital_write(self.cs_pin, 0)
+        self.epdconfig.spi_writebyte2(data)
+        self.epdconfig.digital_write(self.cs_pin, 1)
     
     '''
     function :Wait until the busy_pin goes LOW
@@ -93,8 +94,8 @@ class EPD:
     '''
     def ReadBusy(self):
         logger.debug("e-Paper busy")
-        while(epdconfig.digital_read(self.busy_pin) == 1):      # 0: idle, 1: busy
-            epdconfig.delay_ms(10)  
+        while(self.epdconfig.digital_read(self.busy_pin) == 1):      # 0: idle, 1: busy
+            self.epdconfig.delay_ms(10)  
         logger.debug("e-Paper busy release")
 
     '''
@@ -168,7 +169,7 @@ class EPD:
     parameter:
     '''
     def init(self):
-        if (epdconfig.module_init() != 0):
+        if (self.epdconfig.module_init() != 0):
             return -1
         # EPD hardware init start
         self.reset()
@@ -207,7 +208,7 @@ class EPD:
     parameter:
     '''
     def init_fast(self):
-        if (epdconfig.module_init() != 0):
+        if (self.epdconfig.module_init() != 0):
             return -1
         # EPD hardware init start
         self.reset()
@@ -285,9 +286,9 @@ class EPD:
         image : Image data
     '''
     def displayPartial(self, image):
-        epdconfig.digital_write(self.reset_pin, 0)
-        epdconfig.delay_ms(1)
-        epdconfig.digital_write(self.reset_pin, 1)  
+        self.epdconfig.digital_write(self.reset_pin, 0)
+        self.epdconfig.delay_ms(1)
+        self.epdconfig.digital_write(self.reset_pin, 1)  
 
         self.send_command(0x3C) # BorderWavefrom
         self.send_data(0x80)
@@ -343,8 +344,8 @@ class EPD:
         self.send_command(0x10) #enter deep sleep
         self.send_data(0x01)
         
-        epdconfig.delay_ms(2000)
-        epdconfig.module_exit()
+        self.epdconfig.delay_ms(2000)
+        self.epdconfig.module_exit()
 
 ### END OF FILE ###
 
