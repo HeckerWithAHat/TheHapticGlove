@@ -22,14 +22,26 @@ def createKeyboardFromPrompt(question):
     return imageToDisplay
     
 
-def updateKeyboardFromPrompt(baseImage, coords):
+def updateKeyboardFromPrompt(baseImage, coords, direction):
     chars = [list('ABCDEFGHIJKLM!@#$%^'),list('NOPQRSTUVWXYZ&*()-_'),list('abcdefghijklm+=~`[]'),list('nopqrstuvwxyz{}|\\:;'),list('0123456789"\'<>,.?/ ')]
     font11 = ImageFont.truetype('fonts/Font.ttc', 11)
     char = chars[coords[0]][coords[1]]
-    coords = (2+13*coords[1], 56+13*coords[0], 14+13*coords[1], 68+13*coords[0])
     draw = ImageDraw.Draw(baseImage)
-    draw.text((coords[0]+7, coords[1]+7), char, font = font11, fill = 255, anchor = 'mm', align = 'center')
-    draw.rectangle(coords, outline = 0,fill = 0)
+    draw.text((2+13*coords[1]+7, 56+13*coords[0]+7), char, font = font11, fill = 255, anchor = 'mm', align = 'center')
+    draw.rectangle((2+13*coords[1], 56+13*coords[0], 14+13*coords[1], 68+13*coords[0]), outline = 0,fill = 0)
+    match direction:
+        case 'up':
+            coords = ((coords[0]+1) % 5, coords[1])
+        case 'down':
+            coords = ((coords[0]-1) % 5, coords[1])
+        case 'left':
+            coords = (coords[0], (coords[1]+1)%19)
+        case 'right':
+            coords = (coords[0], (coords[1]-1)%19)
+    
+    char = chars[coords[0]][coords[1]]
+    draw.text((2+13*coords[1]+7, 56+13*coords[0]+7), char, font = font11, fill = 0, anchor = 'mm', align = 'center')
+    draw.rectangle((2+13*coords[1], 56+13*coords[0], 14+13*coords[1], 68+13*coords[0]), outline = 0)
     globalvars.epd.displayPartial(globalvars.epd.getbuffer(baseImage))
 
 
