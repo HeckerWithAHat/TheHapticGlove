@@ -39,14 +39,10 @@ class OS:
             if changeWifi:
                 while didWifiConnect == False:
                     wifi_SSID = ""
-                    lines = subprocess.check_output(["iwlist", "wlan0", "scan"]).decode("utf-8").split('\n')
-                    print(lines)
-                    ssids = set()
-                    for line in lines:
-                        if "ESSID:" in line:
-                            ssid = line.split("ESSID:")[-1].strip()
-                            ssids.add(ssid)
-                    ssids = sorted(list(ssids))
+                    ssids = list()
+                    for wifi in nmcli.device.wifi():
+                        ssids.append(wifi.ssid)
+                    ssids = sorted(list(set(ssids)))
                     print(ssids)
                     EPDAPI.createImageFromOptions("What is the name of the WiFi?", ssids)
                     while wifi_SSID == "":
@@ -73,6 +69,8 @@ class OS:
                         if globalvars.buttons["MM"].is_pressed: # select
                             currenttext +=charList[currentPlace[0]][currentPlace[1]]
                             baseImage = EPDAPI.createKeyboardFromPrompt("What is the password: " + currenttext)
+                            EPDAPI.updateKeyboardFromPrompt(baseImage, currentPlace, "up")
+
                         if globalvars.buttons["RM"].is_pressed: # right
                             currentPlace = (currentPlace[0], (currentPlace[1] + 1) % 19)
                             print(currentPlace)
@@ -85,12 +83,14 @@ class OS:
                             currentPlace = ((currentPlace[0] + 1) % 5, currentPlace[1])
                             print(currentPlace)
                             EPDAPI.updateKeyboardFromPrompt(baseImage, currentPlace, "down")
-                        if globalvars.buttons["IT"].is_pressed: # YES
+                        if globalvars.buttons["PT"].is_pressed: # YES
                             wifi_PASS = currenttext
                             break
-                        if globalvars.buttons["RT"].is_pressed: # back
+                        if globalvars.buttons["PB"].is_pressed: # back
                             currenttext = currenttext[:-1] 
                             baseImage = EPDAPI.createKeyboardFromPrompt("What is the password: " + currenttext)
+                            EPDAPI.updateKeyboardFromPrompt(baseImage, currentPlace, "up")
+
 
 
                     self.changeWifi(wifi_SSID, wifi_PASS)
