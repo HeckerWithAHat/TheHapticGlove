@@ -44,16 +44,18 @@ class OS:
                         ssids.append(wifi.ssid)
                     ssids = sorted(list(set(ssids)))
                     print(ssids)
-                    EPDAPI.createImageFromOptions("What is the name of the WiFi?", ssids)
+                    
                     while wifi_SSID == "":
                         if globalvars.buttons["IM"].is_pressed: # left
                             ssids.append(ssids.pop(0))
+                            EPDAPI.createImageFromOptions("What is the name of the WiFi?", ssids)
                                 
                         if globalvars.buttons["MM"].is_pressed: # select
                             wifi_SSID = ssids[0]
                             break
                         if globalvars.buttons["RM"].is_pressed: # right
                             ssids.insert(0,ssids.pop())
+                            EPDAPI.createImageFromOptions("What is the name of the WiFi?", ssids)
                     wifi_PASS = ""
                     currentPlace = (2,9)
                     charList = [list('ABCDEFGHIJKLM!@#$%^'),list('NOPQRSTUVWXYZ&*()-_'),list('abcdefghijklm+=~`[]'),list('nopqrstuvwxyz{}|\\:;'),list('0123456789"\'<>,.?/ ')]

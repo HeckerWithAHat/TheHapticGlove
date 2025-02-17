@@ -49,7 +49,7 @@ def updateKeyboardFromPrompt(baseImage, coords, direction):
 
 def createImageFromOptions(question, options):
     font20 = ImageFont.truetype('fonts/Font.ttc', 20)
-    font18 = ImageFont.truetype('fonts/Font.ttc', 18)
+    font18 = ImageFont.truetype('fonts/Font.ttc', 12)
     imageToDisplay = Image.new('1', (250, 122), 255)  # 250*122
     drawblack = ImageDraw.Draw(imageToDisplay)
     drawblack.text((125, 15), question, font = font20, fill = 0, anchor = 'mm', align = 'center')
