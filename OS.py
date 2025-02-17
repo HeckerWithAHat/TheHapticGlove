@@ -128,15 +128,29 @@ class OS:
         else:
             print("Failed to connect to Wi-Fi. Attempting to update Wi-Fi settings.")
             return False
-        
+    
     def registerApps(self):
+        # register/initialize all apps
+        # store in a list in global vars
+        pass
         
-        count = 0
-        for file_name in os.listdir("apps"):
-            if file_name.endswith(".py"):
-                class_name = file_name[:-3]  # Remove the .py extension
-                classToRegister = getattr(__import__('apps.' + class_name, globals(), locals(), [class_name], 0), class_name)
-                
-                instance = classToRegister()
-                count = count + 1
+    def changeApp(self):
+        # using the list of all apps in global vars, display imageFromOptions of all apps that are available
+        # available apps are ones that fit the current mode (wifi or not)
+        # listen for button presses and change the current app to the selected app
+        # on select, change the current commands to the selected app's commands
+        
+        # this command should be called when both the index and middle finger and pressed and held
+        pass    
+    
+    def changeSetting(self):
+        # using the list of all apps in global vars, display imageFromOptions of all apps
+        # listen for button presses
+        # on select, using the list of all settings in global vars, display imageFromOptions of all settings
+        # listen for button presses and change the current setting to the option selected
+        # Setting is a JSON file of all the required information about setting
+        # Setting = {name: name, type: toggle/keyboard/option, value: value}
+        
+        # this command should be called when both the ring and pinky finger and pressed and held
+        pass
                 

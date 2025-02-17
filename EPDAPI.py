@@ -27,8 +27,9 @@ def updateKeyboardFromPrompt(baseImage, coords, direction):
     font11 = ImageFont.truetype('fonts/Font.ttc', 11)
     char = chars[coords[0]][coords[1]]
     draw = ImageDraw.Draw(baseImage)
-    draw.text((2+13*coords[1]+7, 56+13*coords[0]+7), char, font = font11, fill = 255, anchor = 'mm', align = 'center')
     draw.rectangle((2+13*coords[1], 56+13*coords[0], 14+13*coords[1], 68+13*coords[0]), outline = 0,fill = 0)
+    draw.text((2+13*coords[1]+7, 56+13*coords[0]+7), char, font = font11, fill = 255, anchor = 'mm', align = 'center')
+
     match direction:
         case 'up':
             coords = ((coords[0]+1) % 5, coords[1])
@@ -40,8 +41,8 @@ def updateKeyboardFromPrompt(baseImage, coords, direction):
             coords = (coords[0], (coords[1]-1)%19)
     
     char = chars[coords[0]][coords[1]]
-    draw.text((2+13*coords[1]+7, 56+13*coords[0]+7), char, font = font11, fill = 0, anchor = 'mm', align = 'center')
     draw.rectangle((2+13*coords[1], 56+13*coords[0], 14+13*coords[1], 68+13*coords[0]), outline = 0, fill = 255)
+    draw.text((2+13*coords[1]+7, 56+13*coords[0]+7), char, font = font11, fill = 0, anchor = 'mm', align = 'center')
     globalvars.epd.displayPartial(globalvars.epd.getbuffer(baseImage))
 
 

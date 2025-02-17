@@ -1,1 +1,30 @@
-APP API
+OS.py
+def registerApps(self):
+        # register/initialize all apps
+        # store in a list in global vars
+        pass
+        
+    def changeApp(self):
+        # using the list of all apps in global vars, display imageFromOptions of all apps that are available
+        # available apps are ones that fit the current mode (wifi or not)
+        # listen for button presses and change the current app to the selected app
+        # on select, change the current commands to the selected app's commands
+        
+        # this command should be called when both the index and middle finger and pressed and held
+        pass    
+    
+    def changeSetting(self):
+        # using the list of all apps in global vars, display imageFromOptions of all apps
+        # listen for button presses
+        # on select, using the list of all settings in global vars, display imageFromOptions of all settings
+        # listen for button presses and change the current setting to the option selected
+        # Setting is a JSON file of all the required information about setting
+        # Setting = {name: name, type: toggle/keyboard/option, value: value}
+        
+        # this command should be called when both the ring and pinky finger and pressed and held
+        pass
+
+
+
+OS.py change Wifi so that the wifi data is stored in the settings JSON file where the app data is stored. call it settings.JSON
+Sotre Wifi Username and password. If user chooses to use wifi but not change, load that, if they want to change, then make sure to change this value
