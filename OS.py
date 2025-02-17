@@ -62,7 +62,7 @@ class OS:
                     currentPlace = (2,9)
                     charList = [list('ABCDEFGHIJKLM!@#$%^'),list('NOPQRSTUVWXYZ&*()-_'),list('abcdefghijklm+=~`[]'),list('nopqrstuvwxyz{}|\\:;'),list('0123456789"\'<>,.?/ ')]
                     baseImage = EPDAPI.createKeyboardFromPrompt("What is the password?")
-                    EPDAPI.updateKeyboardFromPrompt(baseImage, currentPlace)
+                    EPDAPI.updateKeyboardFromPrompt(baseImage, currentPlace, "up")
                     # read input and update the currentChar, then when select is pressed, add current char to wifi_PASS
                     currenttext = ""
                     while wifi_PASS == "":
