@@ -111,7 +111,7 @@ class OS:
             if conn.name == name:
                 newWifi = False
                 break
-        if newWifi:
+        if not newWifi:
             nmcli.connection.up(name)
         else:
             nmcli.device.wifi_connect(name, password)
