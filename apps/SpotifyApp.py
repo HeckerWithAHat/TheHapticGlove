@@ -155,15 +155,13 @@ class SpotifyApp:
         
         
         SpotifyApp = App("spotify", "Spotify")
-        SpotifyApp.setAppDefinedCommands(
-            playpause={"name": "Play/Pause", "method":self.play_pause},
-            shuffletoggle={"name": "Shuffle", "method":self.shuffle_toggle},
-            repeattoggle={"name": "Repeat", "method":self.repeat_toggle},
-            skipsong={"name": "Skip", "method":self.skip},
-            previoussong={"name": "Back", "method":self.previous},
-            volumeup={"name": "Volume Up", "method":self.volume_up},
-            volumedown={"name": "Volume Down", "method":self.volume_down}
-            )
+        SpotifyApp.setAppCommand(self.play_pause, "IT")
+        SpotifyApp.setAppCommand(self.shuffle_toggle, "IM")
+        SpotifyApp.setAppCommand(self.repeat_toggle, "IB")
+        SpotifyApp.setAppCommand(self.skip, "MM")
+        SpotifyApp.setAppCommand(self.previous, "MT")
+        SpotifyApp.setAppCommand(self.volume_up, "PT")
+        SpotifyApp.setAppCommand(self.volume_down, "PB")
         
         
 
