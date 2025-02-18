@@ -1,17 +1,8 @@
 OS.py
-def registerApps(self):
-        # register/initialize all apps
-        # store in a list in global vars
-        pass
-        
+
     def changeApp(self):
-        # using the list of all apps in global vars, display imageFromOptions of all apps that are available
-        # available apps are ones that fit the current mode (wifi or not)
-        # listen for button presses and change the current app to the selected app
-        # on select, change the current commands to the selected app's commands
-        
-        # this command should be called when both the index and middle finger and pressed and held
-        pass    
+        after i assign the commands. I want to display the current commands on the screen. Since I dont expect the screen to change its looks while an app is running, 
+        all I need to to is create a method in the EPDAPI that displays an apps commands
     
     def changeSetting(self):
         # using the list of all apps in global vars, display imageFromOptions of all apps
@@ -27,4 +18,4 @@ def registerApps(self):
 
 
 OS.py change Wifi so that the wifi data is stored in the settings JSON file where the app data is stored. call it settings.JSON
-Sotre Wifi Username and password. If user chooses to use wifi but not change, load that, if they want to change, then make sure to change this value
+Store Wifi Username and password. If user chooses to use wifi but not change, load that, if they want to change, then make sure to change this value

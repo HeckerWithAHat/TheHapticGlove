@@ -5,12 +5,13 @@ import epd2in13_V4
 import globalvars
 from gpiozero import *
 import nmcli
+import threading
 class OS:
     def __init__(self):
         # If yes do all the wifi stuff, and set the wifi variable in global vars to true
         # If no, just boot up the OS, and set the wifi variable in global vars to false
         for m in globalvars.mapping: 
-            globalvars.buttons[m] = Button(globalvars.mapping[m])
+            globalvars.buttons[m] = Button(pin = globalvars.mapping[m], hold_time = 5, hold_repeat = False, bounce_time=0.1)
         globalvars.epd = epd2in13_V4.EPD()
         globalvars.epd.init()
         globalvars.epd.Clear()
@@ -99,7 +100,22 @@ class OS:
                     didWifiConnect = self.connectedToWiFi()
             else:
                 didWifiConnect = self.connectedToWiFi()
-    
+                
+        self.registerApps()
+        self.changeApp()
+        while True:
+            if (globalvars.buttons["IT"].is_held and globalvars.buttons["MT"].is_held):
+                self.changeApp()
+            elif (globalvars.buttons["MT"].is_held and globalvars.buttons["RT"].is_held):
+                self.changeSetting()
+            else: 
+                for button in globalvars.current_buttons:
+                    if globalvars.buttons[button].is_pressed:
+                        globalvars.current_buttons[button]()
+                        
+            
+        
+        
         
     def changeWifi(self, name, password):
         # Disconnect from current network
@@ -132,9 +148,9 @@ class OS:
             return False
     
     def registerApps(self):
-        # register/initialize all apps
-        # store in a list in global vars
-        pass
+        for file_name in os.listdir("apps"):
+            if file_name.endswith(".py"):
+                getattr(__import__('apps.' + file_name[:-3], globals(), locals(), [file_name[:-3]], 0), file_name[:-3])()
         
     def changeApp(self):
         # using the list of all apps in global vars, display imageFromOptions of all apps that are available
@@ -143,7 +159,29 @@ class OS:
         # on select, change the current commands to the selected app's commands
         
         # this command should be called when both the index and middle finger and pressed and held
-        pass    
+        import EPDAPI
+        allNames = list()
+        for app in globalvars.installed_apps.values():
+            if app.usesWifi and not globalvars.wifiModeActive:
+                continue
+            allNames.append(app.appName)
+        EPDAPI.createImageFromOptions("What app do you want to use?", allNames)
+        selectedApp = None
+        while selectedApp == None:
+            if globalvars.buttons["IM"].is_pressed: # left
+                allNames.append(allNames.pop(0))
+                EPDAPI.createImageFromOptions("What app do you want to use?", allNames)
+                    
+            if globalvars.buttons["MM"].is_pressed: # select
+                selectedApp = allNames[0]
+                break
+            
+            if globalvars.buttons["RM"].is_pressed: # right
+                allNames.insert(0,allNames.pop())
+                EPDAPI.createImageFromOptions("What app do you want to use?", allNames)
+        globalvars.current_buttons = selectedApp.appDefinedCommands
+        
+            
     
     def changeSetting(self):
         # using the list of all apps in global vars, display imageFromOptions of all apps

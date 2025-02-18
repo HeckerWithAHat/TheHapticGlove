@@ -1,6 +1,6 @@
 from AppAPI import *
 from globalvars import *
-import urequests as requests
+import  requests
 from time import sleep
 
 class SpotifyApp:
