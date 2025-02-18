@@ -161,23 +161,27 @@ class OS:
         # this command should be called when both the index and middle finger and pressed and held
         import EPDAPI
         allNames = list()
+        allApps = list()
         for app in globalvars.installed_apps.values():
             if app.usesWifi and not globalvars.wifiModeActive:
                 continue
             allNames.append(app.appName)
+            allApps.append(app)
         EPDAPI.createImageFromOptions("What app do you want to use?", allNames)
         selectedApp = None
         while selectedApp == None:
             if globalvars.buttons["IM"].is_pressed: # left
                 allNames.append(allNames.pop(0))
+                allApps.append(allApps.pop(0))
                 EPDAPI.createImageFromOptions("What app do you want to use?", allNames)
                     
             if globalvars.buttons["MM"].is_pressed: # select
-                selectedApp = allNames[0]
+                selectedApp = allApps[0]
                 break
             
             if globalvars.buttons["RM"].is_pressed: # right
                 allNames.insert(0,allNames.pop())
+                allApps.insert(0,allApps.pop())
                 EPDAPI.createImageFromOptions("What app do you want to use?", allNames)
         globalvars.current_buttons = selectedApp.appDefinedCommands
         
