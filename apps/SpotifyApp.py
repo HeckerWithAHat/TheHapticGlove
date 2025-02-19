@@ -151,7 +151,7 @@ class SpotifyApp:
                                 client_secret=self.spotify_client_secret,
                                 redirect_uri='http://localhost:5000',
                                 scope=self.scope)
-        self.sp = spotipy.Spotify(client_credentials_manager=self.auth_manager)
+        self.sp = spotipy.Spotify(auth_manager=self.auth_manager)
         
         
         SpotifyApp = App("spotify", "Spotify")
