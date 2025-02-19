@@ -1,10 +1,10 @@
 from AppAPI import *
 from globalvars import *
-import  requests
-from time import sleep
+import requests
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-
+import urllib
+import json
 class SpotifyApp:
 
     def play_pause(self):
@@ -146,13 +146,51 @@ class SpotifyApp:
         self.spotify_client_id = "8f775a31bc9b4e67a8ae753400cd7cfb"
         self.spotify_client_secret = "770936463c1a47068ef59d26f1ceb143"
         self.scope='user-read-playback-state user-modify-playback-state user-read-currently-playing user-library-modify user-library-read'
-
-        self.auth_manager = SpotifyOAuth(client_id=self.spotify_client_id,
-                                client_secret=self.spotify_client_secret,
-                                redirect_uri='http://localhost:5000',
-                                scope=self.scope)
-        self.sp = spotipy.Spotify(auth_manager=self.auth_manager)
+        self.redirect_uri = 'http://localhost/callback'
+        self.cache_path = '.cache'
         
+        # Initialize auth manager
+        self.auth_manager = SpotifyOAuth(
+            client_id=self.spotify_client_id,
+            client_secret=self.spotify_client_secret,
+            redirect_uri=self.redirect_uri,
+            scope=self.scope,
+            cache_path=self.cache_path
+        )
+        
+        # Try to load existing token
+        try:
+            with open(self.cache_path, 'r') as f:
+                cache_data = json.load(f)
+                token_info = cache_data.get('token_info')
+                
+                if token_info and self.auth_manager.is_token_expired(token_info):
+                    token_info = self.auth_manager.refresh_access_token(token_info['refresh_token'])
+                    cache_data['token_info'] = token_info
+                    with open(self.cache_path, 'w') as f:
+                        json.dump(cache_data, f)
+                        
+        except FileNotFoundError:
+            # Get new authorization
+            auth_url = self.auth_manager.get_authorize_url()
+            response = requests.get(auth_url)
+            callback_url = response.url
+            parsed_url = urllib.parse.urlparse(callback_url)
+            query_params = urllib.parse.parse_qs(parsed_url.query)
+            
+            if 'code' in query_params:
+                token_info = self.auth_manager.get_access_token(query_params['code'][0])
+                
+                # Store token info
+                cache_data = {
+                    'state': self.auth_manager.state,
+                    'token_info': token_info
+                }
+                with open(self.cache_path, 'w') as f:
+                    json.dump(cache_data, f)
+            
+        self.sp = spotipy.Spotify(auth_manager=self.auth_manager)
+            
         
         SpotifyApp = App("spotify", "Spotify")
         SpotifyApp.setAppCommand(self.play_pause, "IT")
