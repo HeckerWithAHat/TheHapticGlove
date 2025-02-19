@@ -146,7 +146,7 @@ class SpotifyApp:
         self.spotify_client_id = "8f775a31bc9b4e67a8ae753400cd7cfb"
         self.spotify_client_secret = "770936463c1a47068ef59d26f1ceb143"
         self.scope='user-read-playback-state user-modify-playback-state user-read-currently-playing user-library-modify user-library-read'
-        self.redirect_uri = 'http://localhost/callback'
+        self.redirect_uri = 'http://localhost:5000/callback'
         self.cache_path = '.cache'
         
         # Initialize auth manager
