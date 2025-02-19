@@ -147,7 +147,7 @@ class SpotifyApp:
         self.spotify_client_id = "8f775a31bc9b4e67a8ae753400cd7cfb"
         self.spotify_client_secret = "770936463c1a47068ef59d26f1ceb143"
         self.scope='user-read-playback-state user-modify-playback-state user-read-currently-playing'
-        self.redirect_uri = 'http://localhost:5000/callback'
+        self.redirect_uri = 'http://glove.lan:5000'
         
         # Initialize auth manager
         self.auth_manager = SpotifyOAuth(
@@ -158,7 +158,7 @@ class SpotifyApp:
         )
         auth_url = self.auth_manager.get_authorize_url()
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.bind(('127.0.0.1', 5000))
+            s.bind(('0.0.0.0', 8000))
             s.listen()
             conn, addr = s.accept()
             redirect_response = f"""HTTP/1.1 302 Found
@@ -169,14 +169,19 @@ Connection: close
 """.encode('utf-8')
             conn.sendall(redirect_response)
             conn.close()
+            s.close()
         
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.bind(('127.0.0.1', 5000))
+            s.bind(('0.0.0.0', 5000))
             s.listen()
             conn, addr = s.accept()
-            print(addr.value)
+            print(addr)
+            request = b''
+            request += conn.recv(4096)
+            self.code = request.decode('utf-8').split('\n')[0][11:][:-10]
             conn.close()
-         
+            s.close()
+        self.auth_manager.get_access_token(code=self.code)
         self.sp = spotipy.Spotify(auth_manager=self.auth_manager)
             
         
