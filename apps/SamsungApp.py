@@ -10,6 +10,14 @@ class SamsungApp:
         globalvars.current_buttons = {}
         ip = []
         def ipToStr(ip) :
+            if len(ip) == 0:
+                return ""
+            if len(ip) == 1:
+                return str(ip[0]) + "."
+            if len(ip) == 2:
+                return str(ip[0]) + "." + str(ip[1]) + "."
+            if len(ip) == 3:
+                return str(ip[0]) + "." + str(ip[1]) + "." + str(ip[2]) + "."
             return str(ip[0]) + "." + str(ip[1]) + "." + str(ip[2]) + "." + str(ip[3])
         currentNum = ""
         createNumpadFromPrompt("What is the IP address: ")
