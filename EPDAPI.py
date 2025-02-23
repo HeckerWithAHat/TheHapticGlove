@@ -29,7 +29,7 @@ def createImageFromButtons(appName, commandNames):
     drawblack.text((125, 15), appName, font = font20, fill = 0, anchor = 'mm', align = 'center')
     for i in range(len(commandNames)):
         drawblack.text((32+(62*(int(i/3))), 68+(20*(i&3))), commandNames[i], font = font18, fill = 0, anchor = 'mm', align = 'center')
-    
+    globalvars.epd.display(globalvars.epd.getbuffer(imageToDisplay))
     
     
 

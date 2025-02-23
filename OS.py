@@ -103,7 +103,6 @@ class OS:
                 
         self.registerApps()
         self.changeApp()
-        globalvars.epd.Clear()
         while True:
             if (globalvars.buttons["IT"].is_held and globalvars.buttons["MT"].is_held):
                 self.changeApp()
