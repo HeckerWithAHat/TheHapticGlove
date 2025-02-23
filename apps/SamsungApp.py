@@ -23,6 +23,7 @@ class SamsungApp:
         createNumpadFromPrompt("What is the IP address: ")
         # read input and update the currentChar, then when select is pressed, add current char to wifi_PASS
         while len(ip) < 4:
+            numrn = currentNum
             if globalvars.buttons["IT"].is_pressed: # 1
                 currentNum += "1"
             elif globalvars.buttons["IM"].is_pressed: # 2
@@ -48,7 +49,8 @@ class SamsungApp:
                 currentNum = ""
             if len(currentNum) > 3:
                 currentNum = currentNum[(len(currentNum)-3):]
-            createNumpadFromPrompt("What is the IP address: " + ipToStr(ip))
+            if currentNum != numrn:
+                createNumpadFromPrompt("What is the IP address: " + ipToStr(ip)+currentNum)
         globalvars.current_buttons = savedButtons
         self.tv = SamsungTVWS(ipToStr(ip), port=8002, token_file=self.token_file)
 
