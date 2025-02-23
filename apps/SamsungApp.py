@@ -45,7 +45,7 @@ class SamsungApp:
             elif globalvars.buttons["PT"].is_pressed: # 0
                 currentNum += "0"
             elif globalvars.buttons["PB"].is_pressed: # next
-                ip[len(ip)] = currentNum
+                ip.append(currentNum)
                 currentNum = ""
             if len(currentNum) > 3:
                 currentNum = currentNum[(len(currentNum)-3):]
