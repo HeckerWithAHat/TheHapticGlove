@@ -52,11 +52,13 @@ class SamsungApp:
             if currentNum != numrn:
                 createNumpadFromPrompt("What is the IP address: " + ipToStr(ip)+currentNum)
         globalvars.current_buttons = savedButtons
+        print(ipToStr(ip))
         self.tv = SamsungTVWS(ipToStr(ip), port=8002, token_file=self.token_file)
+        
 
     def __init__(self):
         self.token_file = os.path.dirname(os.path.realpath(__file__)) + "tv_token.txt"
-        self.tv = SamsungTVWS("", port=8002, token_file=self.token_file)
+        self.tv = SamsungTVWS("192.186.86.24", port=8002, token_file=self.token_file)
         
         
         TVApp = App("samsungtv", "SamsungTV")
