@@ -57,8 +57,9 @@ class SamsungApp:
         
 
     def __init__(self):
+        self.tv = SamsungTVWS('192.186.86.24')
         self.token_file = os.path.dirname(os.path.realpath(__file__)) + "tv_token.txt"
-        self.tv = SamsungTVWS("192.186.86.24", port=8002, token_file=self.token_file)
+        self.tv = SamsungTVWS(host='192.186.86.24', port=8002, token_file=self.token_file)
         
         
         TVApp = App("samsungtv", "SamsungTV")
