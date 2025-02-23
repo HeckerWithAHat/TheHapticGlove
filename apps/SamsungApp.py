@@ -1,7 +1,7 @@
 from AppAPI import *
 from globalvars import *
 from EPDAPI import *
-from samsungctl import Remote 
+from samsungctl import Remote, Config 
 import socket
 class SamsungApp:
     
@@ -97,15 +97,12 @@ class SamsungApp:
     
     def __init__(self):
         self.ip = "192.186.86.24"
-        self.config = {
-            "name": "glove",
-            "description": "glove",
-            "id": "",
-            "host": self.ip,
-            "port": 55000,
-            "method": "legacy",
-            "timeout": 0,
-        }
+        self.config = Config(
+            name = "samsungctl",
+            description= "glove",
+            host= self.ip,
+            method= "websocket"
+        )
                
         
         TVApp = App("samsungtv", "SamsungTV")
