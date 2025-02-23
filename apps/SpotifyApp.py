@@ -1,6 +1,7 @@
 from AppAPI import *
 from globalvars import *
 import requests
+from EPDAPI import *
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import urllib
@@ -148,7 +149,7 @@ class SpotifyApp:
         self.spotify_client_secret = "770936463c1a47068ef59d26f1ceb143"
         self.scope='user-read-playback-state user-modify-playback-state user-read-currently-playing'
         self.redirect_uri = 'http://glove.lan:5000'
-        
+        createImageFromOptions("Please go to the website:", ["glove.lan:8000"])
         # Initialize auth manager
         self.auth_manager = SpotifyOAuth(
             client_id=self.spotify_client_id,
