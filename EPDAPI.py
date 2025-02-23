@@ -45,6 +45,12 @@ def updateKeyboardFromPrompt(baseImage, coords, direction):
     draw.text((2+13*coords[1]+7, 56+13*coords[0]+7), char, font = font11, fill = 0, anchor = 'mm', align = 'center')
     globalvars.epd.displayPartial(globalvars.epd.getbuffer(baseImage))
 
+def createNumpadFromPrompt(question):
+    font11 = ImageFont.truetype('fonts/Font.ttc', 11)
+    imageToDisplay = Image.open('np.jpg')  
+    draw = ImageDraw.Draw(imageToDisplay)
+    draw.text((125, 15), question, font = font11, fill = 0, anchor = 'mm', align = 'center')
+    globalvars.epd.display(globalvars.epd.getbuffer(imageToDisplay))
 
 
 def createImageFromOptions(question, options):
