@@ -18,3 +18,5 @@ class App:
     
     def setAppName(self, name):
         self.appName = name
+    def getAppName(self):
+        return self.appName

@@ -185,6 +185,10 @@ class OS:
                 allApps.insert(0,allApps.pop())
                 EPDAPI.createImageFromOptions("What app do you want to use?", allNames)
         globalvars.current_buttons = selectedApp.appDefinedCommands
+        name = []
+        for button in globalvars.current_buttons:
+            name.append(globalvars.current_buttons[button].__name__)
+        EPDAPI.createImageFromButtons(selectedApp.getAppName(), name)
         
             
     
