@@ -49,7 +49,7 @@ class SamsungApp:
         self.tv = SamsungTVWS("", port=8002, token_file=self.token_file)
         
         
-        TVApp = App("spotify", "Spotify")
+        TVApp = App("samsungtv", "SamsungTV")
         TVApp.setAppCommand(self.tv.shortcuts().home, "IT")
         TVApp.setAppCommand(self.tv.shortcuts().left, "IM")
         TVApp.setAppCommand(self.tv.shortcuts().volume_down, "IB")
