@@ -27,18 +27,9 @@ def createImageFromButtons(appName, commandNames):
     imageToDisplay = Image.open('commandDisplayBase.jpg')  # 250*122
     drawblack = ImageDraw.Draw(imageToDisplay)
     drawblack.text((125, 15), appName, font = font20, fill = 0, anchor = 'mm', align = 'center')
-    drawblack.text((32, 68), commandNames[0], font = font18, fill = 0, anchor = 'mm', align = 'center')
-    drawblack.text((32, 88), commandNames[1], font = font18, fill = 0, anchor = 'mm', align = 'center')
-    drawblack.text((32, 108), commandNames[2], font = font18, fill = 0, anchor = 'mm', align = 'center')
-    drawblack.text((94, 68), commandNames[3], font = font18, fill = 0, anchor = 'mm', align = 'center')
-    drawblack.text((94, 88), commandNames[4], font = font18, fill = 0, anchor = 'mm', align = 'center')
-    drawblack.text((94, 108), commandNames[5], font = font18, fill = 0, anchor = 'mm', align = 'center')
-    drawblack.text((156, 68), commandNames[6], font = font18, fill = 0, anchor = 'mm', align = 'center')
-    drawblack.text((156, 88), commandNames[7], font = font18, fill = 0, anchor = 'mm', align = 'center')
-    drawblack.text((156, 108), commandNames[8], font = font18, fill = 0, anchor = 'mm', align = 'center')
-    drawblack.text((220, 68), commandNames[9], font = font18, fill = 0, anchor = 'mm', align = 'center')
-    drawblack.text((220, 108), commandNames[10], font = font18, fill = 0, anchor = 'mm', align = 'center')
-    imageToDisplay.save("test.jpg")
+    for i in range(len(commandNames)):
+        drawblack.text((32+(62*(int(i/3))), 68+(20*(i&3))), commandNames[i], font = font18, fill = 0, anchor = 'mm', align = 'center')
+    
     
     
 
@@ -116,7 +107,6 @@ def createImageFromOptions(question, options):
     return imageToDisplay
 
 try:
-    createImageFromButtons("Test", ["Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test"])
     pass
 except KeyboardInterrupt:    
     logging.info("ctrl + c:")
