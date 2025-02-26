@@ -1,7 +1,7 @@
 from AppAPI import *
 from globalvars import *
 from EPDAPI import *
-from samsungctl import Remote, Config 
+from samsungtvws import SamsungTVWS
 import socket
 class SamsungApp:
     
@@ -54,68 +54,36 @@ class SamsungApp:
         globalvars.current_buttons = savedButtons
         print(ipToStr(ip))
         self.ip = ipToStr(ip)
+        self.tv = SamsungTVWS(
+            name = "glove",
+            host= self.ip,
+            port=8002,
+            token_file=self.token_file
+        )
         
-    def home(self):
-        with Remote(self.config) as remote:
-            remote.control("KEY_MENU")
-    
-    def left(self):
-        with Remote(self.config) as remote:
-            remote.control("KEY_LEFT")
-            
-    def volume_down(self):
-        with Remote(self.config) as remote:
-            remote.control("KEY_VOLDOWN")
-            
-    def up(self):
-        with Remote(self.config) as remote:
-            remote.control("KEY_UP")
-            
-    def enter(self):
-        with Remote(self.config) as remote:
-            remote.control("KEY_ENTER")
-            
-    def down(self):
-        with Remote(self.config) as remote:
-            remote.control("KEY_DOWN")
-            
-    def back(self):
-        with Remote(self.config) as remote:
-            remote.control("KEY_RETURN")
-            
-    def right(self):
-        with Remote(self.config) as remote:
-            remote.control("KEY_RIGHT")
-            
-    def volume_up(self):
-        with Remote(self.config) as remote:
-            remote.control("KEY_VOLUP")
-            
-    def power(self):
-        with Remote(self.config) as remote:
-            remote.control("KEY_POWER")
     
     def __init__(self):
-        self.ip = "192.186.86.24"
-        self.config = Config(
-            name = "samsungctl",
-            description= "glove",
+        self.ip = ""
+        self.token_file = os.path.dirname(os.path.realpath(__file__)) + '/samsungtvtoken.txt'
+        self.tv = SamsungTVWS(
+            name = "glove",
             host= self.ip,
-            method= "websocket"
+            port=8002,
+            token_file=self.token_file
         )
                
         
         TVApp = App("samsungtv", "SamsungTV")
-        TVApp.setAppCommand(self.home, "IT")
-        TVApp.setAppCommand(self.left, "IM")
-        TVApp.setAppCommand(self.volume_down, "IB")
-        TVApp.setAppCommand(self.up, "MT")
-        TVApp.setAppCommand(self.enter, "MM")
-        TVApp.setAppCommand(self.down, "MB")
-        TVApp.setAppCommand(self.back, "RT")
-        TVApp.setAppCommand(self.right, "RM")
-        TVApp.setAppCommand(self.volume_up, "RB")
-        TVApp.setAppCommand(self.power, "PT")
+        TVApp.setAppCommand(self.tv.shortcuts().home, "IT")
+        TVApp.setAppCommand(self.tv.shortcuts().left, "IM")
+        TVApp.setAppCommand(self.tv.shortcuts().volume_down, "IB")
+        TVApp.setAppCommand(self.tv.shortcuts().up, "MT")
+        TVApp.setAppCommand(self.tv.shortcuts().enter, "MM")
+        TVApp.setAppCommand(self.tv.shortcuts().down, "MB")
+        TVApp.setAppCommand(self.tv.shortcuts().back, "RT")
+        TVApp.setAppCommand(self.tv.shortcuts().right, "RM")
+        TVApp.setAppCommand(self.tv.shortcuts().volume_up, "RB")
+        TVApp.setAppCommand(self.tv.shortcuts().power, "PT")
         TVApp.setAppCommand(self.changeIP, "PB")
         
         
