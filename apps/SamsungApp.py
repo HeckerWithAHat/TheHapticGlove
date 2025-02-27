@@ -85,8 +85,3 @@ class SamsungApp:
         TVApp.setAppCommand(self.tv.shortcuts().volume_up, "RB")
         TVApp.setAppCommand(self.tv.shortcuts().power, "PT")
         TVApp.setAppCommand(self.changeIP, "PB")
-        
-        
-
-    
-
