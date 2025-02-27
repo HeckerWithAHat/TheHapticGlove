@@ -72,11 +72,11 @@ class RaspberryPi:
                 self.GPIO_DC_PIN.on()
             else:
                 self.GPIO_DC_PIN.off()
-        elif pin == self.CS_PIN:
-            if value:
-                self.GPIO_CS_PIN.on()
-            else:
-                self.GPIO_CS_PIN.off()
+        # elif pin == self.CS_PIN:
+            # if value:
+                # self.GPIO_CS_PIN.on()
+            # else:
+                # self.GPIO_CS_PIN.off()
         elif pin == self.PWR_PIN:
             if value:
                 self.GPIO_PWR_PIN.on()
@@ -90,8 +90,8 @@ class RaspberryPi:
             return self.RST_PIN.value
         elif pin == self.DC_PIN:
             return self.DC_PIN.value
-        elif pin == self.CS_PIN:
-            return self.CS_PIN.value
+        # elif pin == self.CS_PIN:
+            # return self.CS_PIN.value
         elif pin == self.PWR_PIN:
             return self.PWR_PIN.value
 
@@ -157,6 +157,6 @@ class RaspberryPi:
         if cleanup:
             self.GPIO_RST_PIN.close()
             self.GPIO_DC_PIN.close()
-            self.GPIO_CS_PIN.close()
+            # self.GPIO_CS_PIN.close()
             self.GPIO_PWR_PIN.close()
             self.GPIO_BUSY_PIN.close()

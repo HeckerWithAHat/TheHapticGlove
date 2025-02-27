@@ -1,104 +1,144 @@
 import subprocess
 import os
 import time
-import epd2in13b_V4
+import epd2in13_V4
+
 import globalvars
 from gpiozero import *
-
-# TODO:
-# ADD A UPDATE BUTTONS METHOD
-
-
+import nmcli
+import threading
 class OS:
     def __init__(self):
-        # Boot up the OS
-        # Ask for if the user wants to start in wifi mode
         # If yes do all the wifi stuff, and set the wifi variable in global vars to true
         # If no, just boot up the OS, and set the wifi variable in global vars to false
         for m in globalvars.mapping: 
-            globalvars.buttons[m] = Button(pin="BOARD"+str(globalvars.mapping[m]))
-        globalvars.epd = epd2in13b_V4.EPD()
+            globalvars.buttons[m] = Button(pin = globalvars.mapping[m], hold_time = 5, hold_repeat = False, bounce_time=0.1)
+        globalvars.epd = epd2in13_V4.EPD()
         globalvars.epd.init()
         globalvars.epd.Clear()
         time.sleep(1)
-        import EPDAPI
-        EPDAPI.createImageFromOptions("Do you want to use WiFi?", option1="Yes", option2="No")
+        import EPDAPI        
+        EPDAPI.createImageFromOptions("Do you want to use WiFi?", ["Yes", "No"])
         usingWifi = None
         while usingWifi == None:
             if globalvars.buttons["IT"].is_pressed: # YES
                 usingWifi = True
-                didWifiConnect = self.connectToWiFi()
-                while didWifiConnect == False:
-                    wifi_SSID = ""
-                    lines = subprocess.check_output(["iwlist", "wlan0", "scan"]).decode("utf-8").split('\n')
-                    ssids = set()
-                    for line in lines:
-                        if "ESSID:" in line:
-                            ssid = line.split("ESSID:")[-1].strip()
-                            ssids.add(ssid)
-                    ssids = sorted(list(ssids))
-                    EPDAPI.createImageFromOptions("What is the name of the WiFi?", options=enumerate(ssids))
-                    # while wifi_SSID == "":
-                    #     # start input searching, on input rotate ssids and then reshow the image
-                    #     # when hit select, set wifiSSID to be the first element in the list
-                    #     pass
-                    # self.changeWifi(wifi_SSID, wifi_PASS)
-                    # didWifiConnect = self.connectToWiFi()
             if globalvars.buttons["RT"].is_pressed: # NO
                 usingWifi = False
+                break
         globalvars.wifiModeActive = usingWifi
+        didWifiConnect = False
+        if globalvars.wifiModeActive:
+            changeWifi = None
+            EPDAPI.createImageFromOptions("Do you want to change WiFi?", ["Yes", "No"])
+            while changeWifi == None:
+                if globalvars.buttons["IT"].is_pressed: # YES
+                    changeWifi = True
+                if globalvars.buttons["RT"].is_pressed: # NO
+                    changeWifi = False
+                    break
+            if changeWifi:
+                while didWifiConnect == False:
+                    wifi_SSID = ""
+                    ssids = list()
+                    for wifi in nmcli.device.wifi():
+                        ssids.append(wifi.ssid)
+                    ssids = sorted(list(set(ssids)))
+                    print(ssids)
+                    
+                    while wifi_SSID == "":
+                        if globalvars.buttons["IM"].is_pressed: # left
+                            ssids.append(ssids.pop(0))
+                            EPDAPI.createImageFromOptions("What is the name of the WiFi?", ssids)
+                                
+                        if globalvars.buttons["MM"].is_pressed: # select
+                            wifi_SSID = ssids[0]
+                            break
+                        if globalvars.buttons["RM"].is_pressed: # right
+                            ssids.insert(0,ssids.pop())
+                            EPDAPI.createImageFromOptions("What is the name of the WiFi?", ssids)
+                    wifi_PASS = ""
+                    currentPlace = (2,9)
+                    charList = [list('ABCDEFGHIJKLM!@#$%^'),list('NOPQRSTUVWXYZ&*()-_'),list('abcdefghijklm+=~`[]'),list('nopqrstuvwxyz{}|\\:;'),list('0123456789"\'<>,.?/ ')]
+                    baseImage = EPDAPI.createKeyboardFromPrompt("What is the password?")
+                    EPDAPI.updateKeyboardFromPrompt(baseImage, currentPlace, "up")
+                    # read input and update the currentChar, then when select is pressed, add current char to wifi_PASS
+                    currenttext = ""
+                    while wifi_PASS == "":
+                        if globalvars.buttons["IM"].is_pressed: # left
+                            currentPlace = (currentPlace[0], (currentPlace[1] - 1) % 19)
+                            print(currentPlace)
+                            EPDAPI.updateKeyboardFromPrompt(baseImage, currentPlace, "left")
+                        if globalvars.buttons["MM"].is_pressed: # select
+                            currenttext +=charList[currentPlace[0]][currentPlace[1]]
+                            baseImage = EPDAPI.createKeyboardFromPrompt("What is the password: " + currenttext)
+                            EPDAPI.updateKeyboardFromPrompt(baseImage, currentPlace, "up")
+
+                        if globalvars.buttons["RM"].is_pressed: # right
+                            currentPlace = (currentPlace[0], (currentPlace[1] + 1) % 19)
+                            print(currentPlace)
+                            EPDAPI.updateKeyboardFromPrompt(baseImage, currentPlace, "right")
+                        if globalvars.buttons["MT"].is_pressed: # up
+                            currentPlace = ((currentPlace[0] - 1) % 5, currentPlace[1])
+                            print(currentPlace)
+                            EPDAPI.updateKeyboardFromPrompt(baseImage, currentPlace, "up")
+                        if globalvars.buttons["MB"].is_pressed: # down
+                            currentPlace = ((currentPlace[0] + 1) % 5, currentPlace[1])
+                            print(currentPlace)
+                            EPDAPI.updateKeyboardFromPrompt(baseImage, currentPlace, "down")
+                        if globalvars.buttons["PT"].is_pressed: # YES
+                            wifi_PASS = currenttext
+                            break
+                        if globalvars.buttons["PB"].is_pressed: # back
+                            currenttext = currenttext[:-1] 
+                            baseImage = EPDAPI.createKeyboardFromPrompt("What is the password: " + currenttext)
+                            EPDAPI.updateKeyboardFromPrompt(baseImage, currentPlace, "up")
+
+
+
+                    self.changeWifi(wifi_SSID, wifi_PASS)
+                    didWifiConnect = self.connectedToWiFi()
+            else:
+                didWifiConnect = self.connectedToWiFi()
                 
+        self.registerApps()
+        self.changeApp()
+        while True:
+            if (globalvars.buttons["IT"].is_held and globalvars.buttons["MT"].is_held):
+                self.changeApp()
+            elif (globalvars.buttons["MT"].is_held and globalvars.buttons["RT"].is_held):
+                self.changeSetting()
+            else: 
+                for button in globalvars.current_buttons:
+                    if globalvars.buttons[button].is_pressed:
+                        globalvars.current_buttons[button]()
+                        
+            
+        
         
         
     def changeWifi(self, name, password):
-        # Read the current wpa_supplicant.conf file
-        config_file = '/etc/wpa_supplicant/wpa_supplicant.conf'
+        # Disconnect from current network
+        nmcli.radio.wifi_off()
+        nmcli.radio.wifi_on()
+        newWifi = True  
+        conns = nmcli.connection()
+        for conn in conns:
+            if conn.name == name:
+                newWifi = False
+                break
+        if not newWifi:
+            nmcli.connection.up(name)
+        else:
+            nmcli.device.wifi_connect(name, password)
         
-        # Create a temporary file to store the modified configuration
-        temp_file = f'/tmp/{os.getpid()}_wpa_supplicant.conf'
-        
-        try:
-            # Read the existing configuration
-            with open(config_file, 'r') as f:
-                content = f.read()
-            
-            # Parse the content to find the last network block
-            lines = content.split('\n')
-            last_network_index = None
-            for i, line in enumerate(lines):
-                if line.startswith('network={'):
-                    last_network_index = i
-                    break
-            
-            # Add the new network block after the last existing one
-            if last_network_index is not None:
-                lines.insert(last_network_index + 1, '\n')
-                lines.insert(last_network_index + 2, f'network={{\n')
-                lines.insert(last_network_index + 3, f'    ssid="{name}"\n')
-                lines.insert(last_network_index + 4, f'    psk="{password}"\n')
-                lines.insert(last_network_index + 5, '}}\n')
-            
-            # Write the modified content to the temporary file
-            with open(temp_file, 'w') as f:
-                f.writelines(lines)
-            
-            # Replace the original file with the modified version
-            os.replace(temp_file, config_file)
-            
-            # Reload the Wi-Fi configuration
-            os.system('sudo wpa_cli -i wlan0 reconfigure')
-            
-            print(f"Successfully updated Wi-Fi connection to {name}")
-        except Exception as e:
-            print(f"An error occurred: {e}")
-    
-    def connectToWiFi(self):
-        # Wait for the network interface to be ready
-        time.sleep(10)
+    def connectedToWiFi(self):
 
         # Get the current IP address
-        result = subprocess.run(['hostname', '-I'])
-        ip_address = result.stdout.decode().strip()
+        result = subprocess.run(['hostname', '-I'], capture_output=True)
+        print(result)
+        print(result.stdout)
+        ip_address = str(result.stdout).split()[0]
 
         if ip_address:
             print(f"Connected to Wi-Fi. Current IP: {ip_address}")
@@ -106,15 +146,56 @@ class OS:
         else:
             print("Failed to connect to Wi-Fi. Attempting to update Wi-Fi settings.")
             return False
-        
+    
     def registerApps(self):
-        
-        count = 0
         for file_name in os.listdir("apps"):
             if file_name.endswith(".py"):
-                class_name = file_name[:-3]  # Remove the .py extension
-                classToRegister = getattr(__import__('apps.' + class_name, globals(), locals(), [class_name], 0), class_name)
-                
-                instance = classToRegister()
-                count = count + 1
+                getattr(__import__('apps.' + file_name[:-3], globals(), locals(), [file_name[:-3]], 0), file_name[:-3])()
+        
+    def changeApp(self):
+        # using the list of all apps in global vars, display imageFromOptions of all apps that are available
+        # available apps are ones that fit the current mode (wifi or not)
+        # listen for button presses and change the current app to the selected app
+        # on select, change the current commands to the selected app's commands
+        
+        # this command should be called when both the index and middle finger and pressed and held
+        import EPDAPI
+        allNames = list()
+        allApps = list()
+        for app in globalvars.installed_apps.values():
+            if app.usesWifi and not globalvars.wifiModeActive:
+                continue
+            allNames.append(app.appName)
+            allApps.append(app)
+        EPDAPI.createImageFromOptions("What app do you want to use?", allNames)
+        selectedApp = None
+        while selectedApp == None:
+            if globalvars.buttons["IM"].is_pressed: # left
+                allNames.append(allNames.pop(0))
+                allApps.append(allApps.pop(0))
+                EPDAPI.createImageFromOptions("What app do you want to use?", allNames)
+                    
+            if globalvars.buttons["MM"].is_pressed: # select
+                selectedApp = allApps[0]
+                break
+            
+            if globalvars.buttons["RM"].is_pressed: # right
+                allNames.insert(0,allNames.pop())
+                allApps.insert(0,allApps.pop())
+                EPDAPI.createImageFromOptions("What app do you want to use?", allNames)
+        globalvars.current_buttons = selectedApp.appDefinedCommands
+        EPDAPI.createImageFromButtons(selectedApp.getAppName(), globalvars.current_buttons)
+        
+            
+    
+    def changeSetting(self):
+        # using the list of all apps in global vars, display imageFromOptions of all apps
+        # listen for button presses
+        # on select, using the list of all settings in global vars, display imageFromOptions of all settings
+        # listen for button presses and change the current setting to the option selected
+        # Setting is a JSON file of all the required information about setting
+        # Setting = {name: name, type: toggle/keyboard/option, value: value}
+        
+        # this command should be called when both the ring and pinky finger and pressed and held
+        pass
                 

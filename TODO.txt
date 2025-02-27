@@ -1,12 +1,21 @@
-Opening Apps
-Using Apps
-    Using Global Buttons
-        Apps themselves will have UI only for settings
-        Apps allow you to choose which buttons does waht command from what app
-Using Global Long Buttons
-    These buttons cannot be changed by apps, and will do basic functionalities incuding but not limited to:
-        Return to Home
-        Turn off screen
-        Turn on screen
-        Select
-        Up down left right
+OS.py
+
+    def changeApp(self):
+        after i assign the commands. I want to display the current commands on the screen. Since I dont expect the screen to change its looks while an app is running, 
+        all I need to to is create a method in the EPDAPI that displays an apps commands
+    
+    def changeSetting(self):
+        # using the list of all apps in global vars, display imageFromOptions of all apps
+        # listen for button presses
+        # on select, using the list of all settings in global vars, display imageFromOptions of all settings
+        # listen for button presses and change the current setting to the option selected
+        # Setting is a JSON file of all the required information about setting
+        # Setting = {name: name, type: toggle/keyboard/option, value: value}
+        
+        # this command should be called when both the ring and pinky finger and pressed and held
+        pass
+
+
+
+OS.py change Wifi so that the wifi data is stored in the settings JSON file where the app data is stored. call it settings.JSON
+Store Wifi Username and password. If user chooses to use wifi but not change, load that, if they want to change, then make sure to change this value

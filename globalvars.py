@@ -1,18 +1,4 @@
 wifiModeActive = False
-getOpenApp = ""
-config_buttons = {
-    "IT": "",
-    "IM": "", # LEFT
-    "IB": "",
-    "MT": "", # UP
-    "MM": "", # SELECT
-    "MB": "", # DOWN
-    "RT": "",
-    "RM": "", # RIGHT
-    "RB": "",
-    "PT": "",
-    "PB": ""
-}
 current_buttons = {
     
 }
@@ -36,9 +22,8 @@ installed_apps = {}
 epd = None
 chars = list('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_+=~`[]{}|\\:;"\'<>,.?/ ')
 buttons = {}
-def fingerCodeToNumber(self, s):
-        return mapping.get(s.upper(), None)
 mapping = {
-    'PT': 38, 'PB': 40, 'RB': 37, 'RM': 35, 'RT': 33,
-    'MB': 12, 'MM': 10, 'MT': 8, 'IB': 7, 'IM': 5, 'IT': 3
+    'PB': 21, 'PT': 20, 'RB': 26, 'RM': 19, 'RT': 13,
+    'MB': 23, 'MM': 15, 'MT': 14, 'IB': 4, 'IM': 3, 'IT': 2
 }
+
