@@ -2,6 +2,7 @@ import subprocess
 import os
 import time
 import epd2in13_V4
+
 import globalvars
 from gpiozero import *
 import nmcli
@@ -16,8 +17,7 @@ class OS:
         globalvars.epd.init()
         globalvars.epd.Clear()
         time.sleep(1)
-        import EPDAPI
-        
+        import EPDAPI        
         EPDAPI.createImageFromOptions("Do you want to use WiFi?", ["Yes", "No"])
         usingWifi = None
         while usingWifi == None:
