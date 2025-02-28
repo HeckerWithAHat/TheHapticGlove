@@ -29,27 +29,27 @@ def createImageFromButtons(appName, commandNames):
     drawblack.text((125, 15), appName, font = font20, fill = 0, anchor = 'mm', align = 'center')
     for button in commandNames:
         if button == "IT":
-            drawblack.text((32, 68), commandNames[button], font = font18, fill = 0, anchor = 'mm', align = 'center')
+            drawblack.text((32, 68), commandNames[button].__name__, font = font18, fill = 0, anchor = 'mm', align = 'center')
         elif button == "IM":
-            drawblack.text((32, 88), commandNames[button], font = font18, fill = 0, anchor = 'mm', align = 'center')
+            drawblack.text((32, 88), commandNames[button].__name__, font = font18, fill = 0, anchor = 'mm', align = 'center')
         elif button == "IB":
-            drawblack.text((32, 108), commandNames[button], font = font18, fill = 0, anchor = 'mm', align = 'center')
+            drawblack.text((32, 108), commandNames[button].__name__, font = font18, fill = 0, anchor = 'mm', align = 'center')
         elif button == "MT":
-            drawblack.text((94, 68), commandNames[button], font = font18, fill = 0, anchor = 'mm', align = 'center')
+            drawblack.text((94, 68), commandNames[button].__name__, font = font18, fill = 0, anchor = 'mm', align = 'center')
         elif button == "MM":
-            drawblack.text((94, 88), commandNames[button], font = font18, fill = 0, anchor = 'mm', align = 'center')
+            drawblack.text((94, 88), commandNames[button].__name__, font = font18, fill = 0, anchor = 'mm', align = 'center')
         elif button == "MB":
-            drawblack.text((94, 108), commandNames[button], font = font18, fill = 0, anchor = 'mm', align = 'center')
+            drawblack.text((94, 108), commandNames[button].__name__, font = font18, fill = 0, anchor = 'mm', align = 'center')
         elif button == "RT":
-            drawblack.text((156, 68), commandNames[button], font = font18, fill = 0, anchor = 'mm', align = 'center')
+            drawblack.text((156, 68), commandNames[button].__name__, font = font18, fill = 0, anchor = 'mm', align = 'center')
         elif button == "RM":
-            drawblack.text((156, 88), commandNames[button], font = font18, fill = 0, anchor = 'mm', align = 'center')
+            drawblack.text((156, 88), commandNames[button].__name__, font = font18, fill = 0, anchor = 'mm', align = 'center')
         elif button == "RB":
-            drawblack.text((156, 108), commandNames[button], font = font18, fill = 0, anchor = 'mm', align = 'center')
+            drawblack.text((156, 108), commandNames[button].__name__, font = font18, fill = 0, anchor = 'mm', align = 'center')
         elif button == "PT":
-            drawblack.text((220, 68), commandNames[button], font = font18, fill = 0, anchor = 'mm', align = 'center')
+            drawblack.text((220, 68), commandNames[button].__name__, font = font18, fill = 0, anchor = 'mm', align = 'center')
         elif button == "PB":
-            drawblack.text((220, 108), commandNames[button], font = font18, fill = 0, anchor = 'mm', align = 'center')
+            drawblack.text((220, 108), commandNames[button].__name__, font = font18, fill = 0, anchor = 'mm', align = 'center')
     globalvars.epd.display(globalvars.epd.getbuffer(imageToDisplay))
 
     
