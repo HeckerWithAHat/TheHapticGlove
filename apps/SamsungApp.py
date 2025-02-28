@@ -63,7 +63,7 @@ class SamsungApp:
         
     
     def __init__(self):
-        self.ip = ""
+        self.ip = "192.168.86.24"
         self.token_file = os.path.dirname(os.path.realpath(__file__)) + '/samsungtvtoken.txt'
         self.tv = SamsungTVWS(
             name = "glove",
