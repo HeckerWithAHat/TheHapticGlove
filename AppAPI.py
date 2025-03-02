@@ -50,14 +50,3 @@ class SettingsManager:
         with open("settings.json", "w") as settingsFile:
             json.dump(data, settingsFile)
             
-# sm = SettingsManager("test", test = "test", test2 = 2, test3 = True)
-# print(sm.settings)
-# print(sm.getSetting("test"))
-# print(sm.getSetting("test2"))
-# print(sm.getSetting("test3"))
-# sm.setSetting("test", "new test")
-# print(sm.getSetting("test"))
-# print(sm.getSetting("test2"))
-# print(sm.getSetting("test3"))
-# sm = SettingsManager("test", test = "test", test2 = 2, test3 = True)
-# print(sm.settings)
