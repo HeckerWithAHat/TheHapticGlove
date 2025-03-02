@@ -53,35 +53,39 @@ class SamsungApp:
                 createNumpadFromPrompt("What is the IP address: " + ipToStr(ip)+currentNum)
         globalvars.current_buttons = savedButtons
         print(ipToStr(ip))
-        self.ip = ipToStr(ip)
+        self.TVApp.settingsManager.setSetting("ip", ipToStr(ip))
+        self.tv.close()
         self.tv = SamsungTVWS(
-            name = "glove",
-            host= self.ip,
-            port=8002,
-            token_file=self.token_file
+            name = self.TVApp.settingsManager.getSetting("name"),
+            host = self.TVApp.settingsManager.getSetting("ip"),
+            port = self.TVApp.settingsManager.getSetting("port"),
+            token_file = self.TVApp.settingsManager.getSetting("token_file")
         )
         
     
     def __init__(self):
-        self.ip = "192.168.86.24"
-        self.token_file = os.path.dirname(os.path.realpath(__file__)) + '/samsungtvtoken.txt'
+        self.TVApp = App("samsungtv", "SamsungTV", usesWifi = True, name = "glove", ip = "192.168.86.24", token_file = os.path.dirname(os.path.realpath(__file__)) + '/samsungtvtoken.txt', port = 8002)
+        
+        
+        
         self.tv = SamsungTVWS(
-            name = "glove",
-            host= self.ip,
-            port=8002,
-            token_file=self.token_file
+            name = self.TVApp.settingsManager.getSetting("name"),
+            host = self.TVApp.settingsManager.getSetting("ip"),
+            port = self.TVApp.settingsManager.getSetting("port"),
+            token_file = self.TVApp.settingsManager.getSetting("token_file")
         )
                
         
-        TVApp = App("samsungtv", "SamsungTV")
-        TVApp.setAppCommand(self.tv.shortcuts().home, "IT")
-        TVApp.setAppCommand(self.tv.shortcuts().left, "IM")
-        TVApp.setAppCommand(self.tv.shortcuts().volume_down, "IB")
-        TVApp.setAppCommand(self.tv.shortcuts().up, "MT")
-        TVApp.setAppCommand(self.tv.shortcuts().enter, "MM")
-        TVApp.setAppCommand(self.tv.shortcuts().down, "MB")
-        TVApp.setAppCommand(self.tv.shortcuts().back, "RT")
-        TVApp.setAppCommand(self.tv.shortcuts().right, "RM")
-        TVApp.setAppCommand(self.tv.shortcuts().volume_up, "RB")
-        TVApp.setAppCommand(self.tv.shortcuts().power, "PT")
-        TVApp.setAppCommand(self.changeIP, "PB")
+        
+        # TVAPP.settingsManager.getSetting("ip")
+        self.TVApp.setAppCommand(self.tv.shortcuts().home, "IT")
+        self.TVApp.setAppCommand(self.tv.shortcuts().left, "IM")
+        self.TVApp.setAppCommand(self.tv.shortcuts().volume_down, "IB")
+        self.TVApp.setAppCommand(self.tv.shortcuts().up, "MT")
+        self.TVApp.setAppCommand(self.tv.shortcuts().enter, "MM")
+        self.TVApp.setAppCommand(self.tv.shortcuts().down, "MB")
+        self.TVApp.setAppCommand(self.tv.shortcuts().back, "RT")
+        self.TVApp.setAppCommand(self.tv.shortcuts().right, "RM")
+        self.TVApp.setAppCommand(self.tv.shortcuts().volume_up, "RB")
+        self.TVApp.setAppCommand(self.tv.shortcuts().power, "PT")
+        self.TVApp.setAppCommand(self.changeIP, "PB")
