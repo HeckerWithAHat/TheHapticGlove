@@ -144,18 +144,22 @@ class SpotifyApp:
         
     
     def __init__(self):
-        
-        self.spotify_client_id = "8f775a31bc9b4e67a8ae753400cd7cfb"
-        self.spotify_client_secret = "770936463c1a47068ef59d26f1ceb143"
-        self.scope='user-read-playback-state user-modify-playback-state user-read-currently-playing'
-        self.redirect_uri = 'http://glove.lan:5000'
+        self.SpotifyApp = App(
+            "spotify", 
+            "Spotify", 
+            True, 
+            spotify_client_id = "8f775a31bc9b4e67a8ae753400cd7cfb", 
+            spotify_client_secret = "770936463c1a47068ef59d26f1ceb143", 
+            scope='user-read-playback-state user-modify-playback-state user-read-currently-playing', 
+            redirect_uri = 'http://glove.lan:5000'
+        )
         createImageFromOptions("Please go to the website:", ["glove.lan:8000"])
         # Initialize auth manager
         self.auth_manager = SpotifyOAuth(
-            client_id=self.spotify_client_id,
-            client_secret=self.spotify_client_secret,
-            redirect_uri=self.redirect_uri,
-            scope=self.scope
+            client_id=self.SpotifyApp.settingsManager.getSetting("spotify_client_id"),
+            client_secret=self.SpotifyApp.settingsManager.getSetting("spotify_client_secret"),
+            redirect_uri=self.SpotifyApp.settingsManager.getSetting("redirect_uri"),
+            scope=self.SpotifyApp.settingsManager.getSetting("scope")
         )
         auth_url = self.auth_manager.get_authorize_url()
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -186,14 +190,14 @@ Connection: close
         self.sp = spotipy.Spotify(auth_manager=self.auth_manager)
             
         
-        SpotifyApp = App("spotify", "Spotify")
-        SpotifyApp.setAppCommand(self.play_pause, "IT")
-        SpotifyApp.setAppCommand(self.shuffle_toggle, "IM")
-        SpotifyApp.setAppCommand(self.repeat_toggle, "IB")
-        SpotifyApp.setAppCommand(self.skip, "MM")
-        SpotifyApp.setAppCommand(self.previous, "MT")
-        SpotifyApp.setAppCommand(self.volume_up, "PT")
-        SpotifyApp.setAppCommand(self.volume_down, "PB")
+        
+        self.SpotifyApp.setAppCommand(self.play_pause, "IT")
+        self.SpotifyApp.setAppCommand(self.shuffle_toggle, "IM")
+        self.SpotifyApp.setAppCommand(self.repeat_toggle, "IB")
+        self.SpotifyApp.setAppCommand(self.skip, "MM")
+        self.SpotifyApp.setAppCommand(self.previous, "MT")
+        self.SpotifyApp.setAppCommand(self.volume_up, "PT")
+        self.SpotifyApp.setAppCommand(self.volume_down, "PB")
         
         
 
