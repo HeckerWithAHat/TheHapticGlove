@@ -2,7 +2,6 @@ from AppAPI import *
 from globalvars import *
 from EPDAPI import *
 from samsungtvws import SamsungTVWS
-import socket
 class SamsungApp:
     
     def changeIP(self):
@@ -89,3 +88,5 @@ class SamsungApp:
         self.TVApp.setAppCommand(self.tv.shortcuts().volume_up, "RB")
         self.TVApp.setAppCommand(self.tv.shortcuts().power, "PT")
         self.TVApp.setAppCommand(self.changeIP, "PB")
+        
+        
