@@ -27,26 +27,50 @@ class ComputerApp:
         else: 
             token = result.split("&")[1].split(":")[1]
             self.computerApp.settingsManager.setSetting("token", token)
+            
+        self.connection.close()
     
     def mouseu(self):
-                self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mousemoveup")
+        self.connection = websocket.create_connection(f"ws://{self.computerApp.settingsManager.getSetting('ip')}:{self.computerApp.settingsManager.getSetting('port')}")
+        self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mousemoveup")
+        self.connection.close()
     def moused(self):
-                self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mousemovedown")
+        self.connection = websocket.create_connection(f"ws://{self.computerApp.settingsManager.getSetting('ip')}:{self.computerApp.settingsManager.getSetting('port')}")
+        self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mousemovedown")
+        self.connection.close()
     def mousel(self):
-                self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mousemoveleft")
+        self.connection = websocket.create_connection(f"ws://{self.computerApp.settingsManager.getSetting('ip')}:{self.computerApp.settingsManager.getSetting('port')}")
+        self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mousemoveleft")
+        self.connection.close()
     def mouser(self):
-                self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mousemoveright")
+        self.connection = websocket.create_connection(f"ws://{self.computerApp.settingsManager.getSetting('ip')}:{self.computerApp.settingsManager.getSetting('port')}")
+        self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mousemoveright")
+        self.connection.close()
     def mouseul(self):
-                self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mousemoveupleft")
+        self.connection = websocket.create_connection(f"ws://{self.computerApp.settingsManager.getSetting('ip')}:{self.computerApp.settingsManager.getSetting('port')}")
+        self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mousemoveupleft")
+        self.connection.close()
     def mousedl(self):
-                self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mousemovedownleft")
+        self.connection = websocket.create_connection(f"ws://{self.computerApp.settingsManager.getSetting('ip')}:{self.computerApp.settingsManager.getSetting('port')}")
+        self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mousemovedownleft")
+        self.connection.close()
     def mouseur(self):
-                self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mousemoveupright")
+        self.connection = websocket.create_connection(f"ws://{self.computerApp.settingsManager.getSetting('ip')}:{self.computerApp.settingsManager.getSetting('port')}")
+        self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mousemoveupright")
+        self.connection.close()
     def mousedr(self):
-                self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mousemovedownright")
+        self.connection = websocket.create_connection(f"ws://{self.computerApp.settingsManager.getSetting('ip')}:{self.computerApp.settingsManager.getSetting('port')}")
+        self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mousemovedownright")
+        self.connection.close()
     def mousetoggle(self):
-                self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mousedowntoggle")
+        self.connection = websocket.create_connection(f"ws://{self.computerApp.settingsManager.getSetting('ip')}:{self.computerApp.settingsManager.getSetting('port')}")
+        self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mousedowntoggle")
+        self.connection.close()
     def clickl(self):
-                self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mouseleftclick")
+        self.connection = websocket.create_connection(f"ws://{self.computerApp.settingsManager.getSetting('ip')}:{self.computerApp.settingsManager.getSetting('port')}")
+        self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mouseleftclick")
+        self.connection.close()
     def clickr(self):
-                self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mouserightclick")
+        self.connection = websocket.create_connection(f"ws://{self.computerApp.settingsManager.getSetting('ip')}:{self.computerApp.settingsManager.getSetting('port')}")
+        self.connection.send("token:" + self.computerApp.settingsManager.getSetting("token") + "&command:mouserightclick")
+        self.connection.close()
