@@ -1,1 +1,1 @@
-{"system": {"wifiSSID": "", "wifiPassword": ""}}
+{"system": {"wifiSSID": "", "wifiPassword": ""}, "spotify": {"spotify_client_id": "8f775a31bc9b4e67a8ae753400cd7cfb", "spotify_client_secret": "770936463c1a47068ef59d26f1ceb143", "scope": "user-read-playback-state user-modify-playback-state user-read-currently-playing", "redirect_uri": "http://glove.lan:5000"}, "computerApp":  {"token": "", "ip": "192.168.86.25", "port": 8000}}

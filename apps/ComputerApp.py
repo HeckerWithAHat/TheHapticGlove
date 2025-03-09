@@ -19,7 +19,7 @@ class ComputerApp:
         self.computerApp.setAppCommand(self.mousedr, "RB")
         self.computerApp.setAppCommand(self.clickl, "PT")
         self.computerApp.setAppCommand(self.clickr, "PB")
-        self.connection = websocket.create_connection(f"ws://{self.computerApp.settingsManager.getSetting("ip")}:{self.computerApp.settingsManager.getSetting("port")}")
+        self.connection = websocket.create_connection(f"ws://{self.computerApp.settingsManager.getSetting('ip')}:{self.computerApp.settingsManager.getSetting('port')}")
         self.connection.send("auth")
         result = self.connection.recv()
         if result == "auth:failed":

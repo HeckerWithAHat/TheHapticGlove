@@ -31,22 +31,23 @@ class SettingsManager:
         self.settings = self.loadSettings(defaultSettings)
     def loadSettings(self, defaultSettings):
         
-        settings = json.load(open("settings.json"))
+        settings = json.load(open("Settings.json"))
         if self.appId in settings.keys():
             return settings[self.appId]
         else:
-            with open("settings.json", "w") as settingsFile:
+            with open("Settings.json", "w") as settingsFile:
                 settings[self.appId] = defaultSettings
                 json.dump(settings, settingsFile)
-                return defaultSettings
+                return defaultSettings["defaultSettings"]
     def getSetting(self, setting):
+        print(self.settings)
         return self.settings[setting]
     
     def setSetting(self, setting, value):
         self.settings[setting] = value
-        with open("settings.json", "r") as settingsFile:
+        with open("Settings.json", "r") as settingsFile:
             data = json.load(settingsFile)
         data[self.appId] = self.settings
-        with open("settings.json", "w") as settingsFile:
+        with open("Settings.json", "w") as settingsFile:
             json.dump(data, settingsFile)
             
