@@ -22,6 +22,7 @@ class ComputerApp:
         self.connection = websocket.create_connection(f"ws://{self.computerApp.settingsManager.getSetting('ip')}:{self.computerApp.settingsManager.getSetting('port')}")
         self.connection.send("auth")
         result = self.connection.recv()
+        print(result)
         if result == "auth:failed":
             self.computerApp.settingsManager.setSetting("token", "")
         else: 

@@ -55,7 +55,7 @@ class SamsungApp:
         self.TVApp.settingsManager.setSetting("ip", ipToStr(ip))
         self.tv.close()
         self.tv = SamsungTVWS(
-            name = self.TVApp.settingsManager.getSetting("name"),
+            name = self.TVApp.settingsManager.getSetting("remoteName"),
             host = self.TVApp.settingsManager.getSetting("ip"),
             port = self.TVApp.settingsManager.getSetting("port"),
             token_file = self.TVApp.settingsManager.getSetting("token_file")
@@ -63,12 +63,12 @@ class SamsungApp:
         
     
     def __init__(self):
-        self.TVApp = App("samsungtv", "SamsungTV", usesWifi = True, name = "glove", ip = "192.168.86.24", token_file = os.path.dirname(os.path.realpath(__file__)) + '/samsungtvtoken.txt', port = 8002)
+        self.TVApp = App("samsungtv", "SamsungTV", usesWifi = True, remoteName = "glove", ip = "192.168.86.24", token_file = os.path.dirname(os.path.realpath(__file__)) + '/samsungtvtoken.txt', port = 8002)
         
         
         
         self.tv = SamsungTVWS(
-            name = self.TVApp.settingsManager.getSetting("name"),
+            name = self.TVApp.settingsManager.getSetting("remoteName"),
             host = self.TVApp.settingsManager.getSetting("ip"),
             port = self.TVApp.settingsManager.getSetting("port"),
             token_file = self.TVApp.settingsManager.getSetting("token_file")
